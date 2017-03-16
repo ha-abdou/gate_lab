@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Glab</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<div id="lab-svg"></div>
+</body>
+<script type="text/javascript">
+	if (
+	    document.readyState === "complete" ||
+	    (document.readyState !== "loading" && !document.documentElement.doScroll)
+	) {
+	  main();
+	} else {
+	  document.addEventListener("DOMContentLoaded", function () {
+	  	main();
+	  });
+	}
+</script>
+
+<script src="src/index.js"></script>
+<script src="src/g_labe/g_labe.js"></script>
+<script src="src/g_labe/functions.utility.js"></script>
+<script src="src/nodes/nodes_bundler.js"></script>
+<script src="src/nodes/node_maker.js"></script>
+<script src="src/nodes/functions.utility.js"></script>
+</html>
