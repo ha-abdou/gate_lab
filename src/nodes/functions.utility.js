@@ -7,13 +7,39 @@ function uid(){
 //todo
 function loadTemplate() {
 	return {
-		test: 
+		and: 
 		{
 			content: `
-			<circle cx="20" cy="20" r="20"/>
+			<g class="draggable">
+				<rect width="50" height="50" style="fill:rgb(0,0,255)" />
+			</g>
+			<circle connectable="input" class="connectable input-a" cx="0" cy="15" r="5"/>
+			<circle connectable="input" class="connectable input-b" input-name="b" cx="0" cy="35" r="5"/>
+			<circle connectable="output" class="connectable output-c" cx="50" cy="25" r="5"/>
 			`,
-			inputs: 0,
-			output: 0
+			inputs: 
+			[
+				{
+					positions: {x: 0, y: 15},
+					name: 'a',
+				},
+				{
+					positions: {x: 0, y: 35},
+					name: 'b',
+				}
+			],
+			outputs:
+			[
+				{
+					positions: {x: 0, y: 25},
+					name: 'c',
+				}
+			],
+			//todo dependency: []
+			upDateOutput: function () {
+				//console.log(this);
+				this.outputs[0].value = !(this.inputs[0].value && this.inputs[1].value);
+			}
 		}
 	};
 }

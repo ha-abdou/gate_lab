@@ -6,5 +6,6 @@ function main() {
 	let	lab = null;
 
 	lab = new GLab("lab-svg");
-	lab.loadNode("test");
+	lab.loadNode("and");
+	lab.loadNode("and");
 }

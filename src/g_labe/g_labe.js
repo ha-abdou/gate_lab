@@ -4,7 +4,8 @@ function GLab(containerId)
 	this.svgElm				= make_container(containerId);
 	this.nodesBundler		= new NodesBundler();
 //	this.segmentsBundler	= new SegmentsBundler();
-
+	document.addEventListener('tryToConnect', tryToConnectHandler.bind(this), false);
+	
 }
 
 GLab.prototype.loadNode = function(nodeName)
