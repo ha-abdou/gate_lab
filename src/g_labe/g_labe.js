@@ -3,8 +3,30 @@ function GLab(containerId)
 {
 	this.svgElm				= make_container(containerId);
 	this.nodesBundler		= new NodesBundler();
-//	this.segmentsBundler	= new SegmentsBundler();
-	document.addEventListener('tryToConnect', tryToConnectHandler.bind(this), false);
+	this.hiddenSegments		= [];
+
+	document.addEventListener('tryToConnect', (e) => {
+		tryToConnectHandler.call(this, e).then((toElm) => {
+			//todo check in connection exist
+			//chain reaction
+			let tmp = newSegments(e.detail.data ,toElm.data);
+			this.svgElm.appendChild(tmp);
+			e.detail.data.connections.push({to: toElm.data, seg: tmp});
+			toElm.data.connections.push({to: e.detail.data, seg: tmp});
+		},(error) => {});
+	}, false);
+	document.addEventListener('nodeStartMoving', (e) => {
+		this.nodesBundler.mapConnections(e.detail.nodeId, (con) => {
+			con.seg.hide();
+		});
+	}, false);
+	document.addEventListener('nodeMoved', (e) => {
+		let node = this.nodesBundler.getNodeById(e.detail.nodeId);
+		this.nodesBundler.updateNodePositions(node, e.detail.pos);
+		this.nodesBundler.mapConnections(e.detail.nodeId, (con) => {
+			con.seg.show();
+		});
+	}, false);
 	
 }
 

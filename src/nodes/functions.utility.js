@@ -31,7 +31,7 @@ function loadTemplate() {
 			outputs:
 			[
 				{
-					positions: {x: 0, y: 25},
+					positions: {x: 50, y: 25},
 					name: 'c',
 				}
 			],

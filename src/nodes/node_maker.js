@@ -3,12 +3,13 @@ function makeNode(template) {
 	let	node = {};
 
 	node.id = uid();
-	node.positions = {x: 10, y: 10};
+	node.positions = {x: 0, y: 0};
 	node.elm = document.createElementNS(SVGNS, 'g');
 	node.elm.innerHTML = template.content;
-	node.elm.setAttributeNS(null, "transform" , "translate(10,10)");
+	node.elm.setAttributeNS(null, "transform" , "translate(0,0)");
 	node.elm.setAttributeNS(null, "class" , 'node');
 	node.elm.setAttributeNS(null, "node-id" , node.id);
+	node.elm.setAttributeNS(null, "id" , node.id);
 	dopeNode(node.elm.getElementsByClassName('draggable')[0]);
 
 	node.inputs = template.inputs ? makeIO(template.inputs, node.elm, 'input') : [];
@@ -17,21 +18,11 @@ function makeNode(template) {
 	return (node);
 }
 
-function dopeNode(node) {
+function dopeNode(node)
+{
 	node.onmousedown = function (event) {
 		if (LABSTATUS === 1)
-		{
-			console.log('add event node start moving');
-			document.onmousemove = function (e) {
-				node.parentElement.setAttributeNS(null, "transform" ,
-					'translate(' + (e.offsetX) + ',' + (e.offsetY) + ')');
-			}
-			document.onmouseup = function (e) {
-				console.log('add event node stop moving');
-				document.onmousemove = null;
-				document.onmouseup = null;
-			}
-		}
+			dragAndDropHandler(node);
 		else if (LABSTATUS === 2)
 		{
 			//delete
@@ -41,7 +32,28 @@ function dopeNode(node) {
 	};
 }
 
-function makeIO(tab, nodeElm, typeName) {
+function dragAndDropHandler(node)
+{
+	let pos		= {x: 0, y: 0};
+	let c_event = {};
+
+	pos = node.positions;
+	c_event = new CustomEvent('nodeStartMoving', {detail: {nodeId: node.parentElement.id}});
+	document.dispatchEvent(c_event);
+	document.onmousemove = (e) => {
+		pos = {x: e.offsetX, y: e.offsetY};
+		node.parentElement.setAttributeNS(null, "transform" ,
+			'translate(' + (e.offsetX) + ',' + (e.offsetY) + ')');
+	}
+	document.onmouseup = (e) => {
+		c_event = new CustomEvent('nodeMoved', {detail: {pos: pos, nodeId: node.parentElement.id}});
+		document.dispatchEvent(c_event);
+		document.onmousemove = null;
+		document.onmouseup = null;
+	}
+}
+function makeIO(tab, nodeElm, typeName)
+{
 	let	tmp_tab	= [];
 	let tmp		= {};
 	let	l		= 0;
@@ -53,6 +65,7 @@ function makeIO(tab, nodeElm, typeName) {
 		tmp.positions = {x: tab[i].positions.x, y: tab[i].positions.y};
 		tmp.value = false;
 		tmp.name = tab[i].name;
+		tmp.connections = [];
 		tmp.elm = nodeElm.getElementsByClassName(typeName + '-' + tmp.name)[0];
 		dopeIO(tmp, typeName);
 		tmp_tab.push(tmp);
@@ -66,8 +79,16 @@ function dopeIO(IO, typeName) {
 	let tryToConnectEvent = {};
 
 	IO.elm.onmousedown = function (event) {
-		tryToConnectEvent = new CustomEvent('tryToConnect', {detail: {'data': IO, 'typeName': typeName}});
-		document.dispatchEvent(tryToConnectEvent);
-		IO.elm.onmousemove = null;
+		IO.elm.onmouseup = e => {
+			IO.elm.onmouseup = null;
+			IO.elm.onmousemove = null;
+		}
+		IO.elm.onmousemove = e => {
+			IO.elm.onmouseup = null;
+			IO.elm.onmousemove = null;
+			tryToConnectEvent = new CustomEvent('tryToConnect', {detail: {'data': IO, 'typeName': typeName}});
+			document.dispatchEvent(tryToConnectEvent);
+		}
 	}
+	IO.elm.data = IO;
 }
