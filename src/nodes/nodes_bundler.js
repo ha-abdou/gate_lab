@@ -15,6 +15,7 @@ NodesBundler.prototype.load = function(nodeName)
 	this.nodesList.push(node);
 	node.upDateOutput();
 	this.updateNodePositions(node, {x: 10, y: 10});
+	node.elm.data = node;
 	return (node.elm);
 };
 
@@ -63,13 +64,14 @@ NodesBundler.prototype.mapConnections = function(nodeId, f) {
 
 	mapIO(node.outputs, f);
 	mapIO(node.inputs, f);
-	function mapIO(IO, f) {
-		for (var j = IO.length - 1; j >= 0; j--) {
-			for (let i = IO[j].connections.length - 1; i >= 0; i--)
-				f(IO[j].connections[i]);
-		}
-	}
 	/*
 	for (let i = node.inputs.connections.length - 1; i >= 0; i--)
 		f(node.inputs.connections[i++]);*/
 };
+
+function mapIO(IO, f) {
+	for (var j = IO.length - 1; j >= 0; j--) {
+		for (let i = IO[j].connections.length - 1; i >= 0; i--)
+			f(IO[j].connections[i]);
+	}
+}

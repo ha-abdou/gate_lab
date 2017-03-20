@@ -8,4 +8,5 @@ function main() {
 	lab = new GLab("lab-svg");
 	lab.loadNode("and");
 	lab.loadNode("and");
+	lab.loadNode("display");
 }

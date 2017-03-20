@@ -40,6 +40,29 @@ function loadTemplate() {
 				//console.log(this);
 				this.outputs[0].value = !(this.inputs[0].value && this.inputs[1].value);
 			}
+		},
+		display: 
+		{
+			content: `
+			<g class="draggable">
+				<rect width="50" height="50" style="fill:rgb(0,0,255)" />
+			</g>
+			<circle connectable="input" class="connectable input-a" cx="0" cy="15" r="5"/>
+			`,
+			inputs: 
+			[
+				{
+					positions: {x: 0, y: 15},
+					name: 'a',
+				}
+			],
+			outputs:
+			[],
+			//todo dependency: []
+			upDateOutput: function () {
+				//console.log(this);
+				console.log(this.inputs[0].value);
+			}
 		}
 	};
 }
