@@ -1,8 +1,10 @@
 "use strict";
 class Segment
 {
-	elm: SVGElement;
-	constructor(public from: Output, public to: Input)
+	elm: 	SVGElement;
+	from: 	Output;
+	to: 	Input;
+	constructor()
 	{
 		this.elm = <SVGElement>document.createElementNS(SVGNS, 'line');
 		this.elm.setAttributeNS(null, 'style', "stroke:rgb(255,0,0);stroke-width:2");

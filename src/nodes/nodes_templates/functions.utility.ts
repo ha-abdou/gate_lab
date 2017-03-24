@@ -20,25 +20,36 @@ function loadTemplate() {
 			inputs: 
 			[
 				{
-					positions: {x: 0, y: 15},
+					position: {x: 0, y: 15},
 					name: 'a',
+					elm: {}
 				},
 				{
-					positions: {x: 0, y: 35},
+					position: {x: 0, y: 35},
 					name: 'b',
+					elm: {}
 				}
 			],
 			outputs:
 			[
 				{
-					positions: {x: 50, y: 25},
+					position: {x: 50, y: 25},
 					name: 'c',
+					elm: {}
 				}
 			],
+			beforeStart: function (node)
+			{
+				this.inputs[0].elm = node.getElementsByClassName('input-a')[0];
+				this.inputs[1].elm = node.getElementsByClassName('input-b')[0];
+				this.outputs[0].elm = node.getElementsByClassName('output-c')[0];
+				return ({inputs: this.inputs, outputs: this.outputs});
+			},
 			//todo dependency: []
 			upDateOutput: function () {
 				//console.log(this);
-				this.outputs[0].value = !(this.inputs[0].value && this.inputs[1].value);
+				//this.outputs[0].value = !(this.inputs[0].value &&
+				// this.inputs[1].value);
 			}
 		},
 		display: 
