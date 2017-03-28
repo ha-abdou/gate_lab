@@ -32,6 +32,21 @@ class Input
         }
     }
 
+    removeConnection(seg: Segment)
+    {
+        this.mapConnections((con: Segment, index: number) => {
+            if (seg == con)
+            {
+                this.connections.splice(index, 1);
+                if (this.connections.length === 0)
+                    this.setValue(null);
+                else
+                    this.setValue(this.connections[0].from.getValue());
+                this.parentNode.upDateOutputs();
+            }
+        });
+    }
+
     getValues()
     {
         let values: any[] = [];
@@ -44,6 +59,14 @@ class Input
     getLastValue ()
     {
         return (this.value);
+    }
+
+    mapConnections (f: any)
+    {
+        let i: number;
+
+        for (i = this.connections.length - 1; i >= 0; i--)
+            f.call(null, this.connections[i], i);
     }
 
     private onMouseDown(event: Event)

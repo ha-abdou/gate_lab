@@ -69,7 +69,7 @@ class Node
     //todo vars
     private onMouseDown(event: Event)
     {
-        if (LABSTATUS === NORMALE)
+        if (LABSTATUS === NORMAL)
             this.dragAndDropHandler(event);
         else if (LABSTATUS === 2)
             this.remove();
@@ -91,7 +91,7 @@ class Node
             c_event = new CustomEvent('nodeMoved', {detail: {node: this}});
             document.dispatchEvent(c_event);
             document.onmousemove = null;
-            document.onmouseup = null;
+            this.elm.onmouseup = null;
         };
     }
 
@@ -107,14 +107,3 @@ class Node
                 inputs[i].name, this));
     }
 }
-
-
-
-/*
-
-dopeNode(node.elm.getElementsByClassName('draggable')[0]);
-
-node.inputs = template.inputs ? makeIO(template.inputs, node.elm, 'input') : [];
-node.outputs = template.outputs ? makeIO(template.outputs, node.elm, 'output') : [];
-node.upDateOutput = template.upDateOutput ? template.upDateOutput : function(){console.log(this)};
-*/

@@ -41,6 +41,22 @@ class Output
         });
     }
 
+    removeConnection(seg: Segment)
+    {
+        this.mapConnections((con: Segment, index: number) => {
+            if (seg == con)
+                this.connections.splice(index, 1);
+        });
+    }
+
+    mapConnections (f: any)
+    {
+        let i: number;
+
+        for (i = this.connections.length - 1; i >= 0; i--)
+            f.call(null, this.connections[i], i);
+    }
+
     private onMouseDown(event: Event)
     {
         let c_event: CustomEvent;

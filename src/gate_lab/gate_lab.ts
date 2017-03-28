@@ -14,16 +14,34 @@ class GLab
         this.svgElm.setAttribute('width', '500');
         this.svgElm.setAttribute('height', '500');
         this.svgElm.style.opacity = "1";
+        this.nodesBundler = new NodesBundler();
         document.getElementById(containerId).appendChild(this.svgElm);
         document.addEventListener('tryToConnect', this.onTryToConnect.bind(this), false);
         document.addEventListener('nodeStartMoving', GLab.onNodeStartMoving.bind(this), false);
         document.addEventListener('nodeMoved', this.onNodeMoved.bind(this), false);
-        this.nodesBundler = new NodesBundler();
+        document.addEventListener('deleteConnection', this.deleteConnection.bind(this), false);
+        //
     }
 
     loadNode (nodeName: string)
     {
         this.svgElm.appendChild( this.nodesBundler.load(nodeName).elm );
+    }
+
+    setStatus (s: number)
+    {
+        LABSTATUS = s;
+    }
+
+    private deleteConnection(e: CustomEvent)
+    {
+        let seg: Segment;
+
+        seg = e.detail.segment;
+        seg.from.removeConnection(seg);
+        seg.to.removeConnection(seg);
+        seg.elm.remove();
+        seg = null;
     }
 
     private onTryToConnect(e: CustomEvent)
@@ -34,9 +52,9 @@ class GLab
                 //todo check if connection exist
                 //if connection not exist
                 if (success.fromEvent.type === 'output')
-                    tmp = new Segment(success.fromEvent.con, success.toEvent.property);
+                tmp = new Segment(success.fromEvent.con, success.toEvent.property);
                 else
-                    tmp = new Segment(success.toEvent.property, success.fromEvent.con);
+                tmp = new Segment(success.toEvent.property, success.fromEvent.con);
                 success.toEvent.property.connections.push(tmp);
                 success.fromEvent.con.connections.push(tmp);
                 tmp.to.setValue(tmp.from.getValue());

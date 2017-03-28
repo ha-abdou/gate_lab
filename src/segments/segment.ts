@@ -5,10 +5,11 @@ class Segment
 	constructor(public from: Output, public to: Input)
 	{
 		this.elm = <SVGElement>document.createElementNS(SVGNS, 'line');
-		this.elm.setAttributeNS(null, 'style', "stroke:rgb(255,0,0);stroke-width:2");
+		this.elm.setAttributeNS(null, 'style', "stroke:rgb(255,0,0);stroke-width:4");
 		this.elm.setAttributeNS(null, 'id', uid());
 		this.upDate();
 		this.elm.property = this;
+		this.elm.onmousedown = this.onMouseDown;
 	}
 	
 	hide()
@@ -34,7 +35,14 @@ class Segment
 		this.elm.setAttributeNS(null, 'y2', this.to.globalPosition().y.toString());
 	}
 
-	private segmentOnMouseDown()
+	private onMouseDown()
 	{
+        if (LABSTATUS === DELETE)
+        {
+            let c_event: CustomEvent;
+
+            c_event = new CustomEvent('deleteConnection', {detail: {segment: this.property}});
+            document.dispatchEvent(c_event);
+        }
 	}
 }
