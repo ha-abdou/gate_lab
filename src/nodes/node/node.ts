@@ -70,20 +70,23 @@ class Node
     private onMouseDown(event: Event)
     {
         if (LABSTATUS === NORMALE)
-            this.dragAndDropHandler();
+            this.dragAndDropHandler(event);
         else if (LABSTATUS === 2)
             this.remove();
     }
 
-    private dragAndDropHandler() {
+    private dragAndDropHandler(event: Event) {
         let c_event: CustomEvent;
+        let offset: Position;
 
+        offset = <Position>{x: event.pageX - this.position.x,
+                            y: event.pageY - this.position.y};
         c_event = new CustomEvent('nodeStartMoving', {detail: {node: this}});
         document.dispatchEvent(c_event);
         document.onmousemove = (e) => {
-            this.move(<Position>{x: e.offsetX, y: e.offsetY});
+            this.move(<Position>{x: e.pageX  - offset.x, y: e.pageY - offset.y});
         };
-        document.onmouseup = () => {
+        this.elm.onmouseup = () => {
             //todo update inputs/outputs positions
             c_event = new CustomEvent('nodeMoved', {detail: {node: this}});
             document.dispatchEvent(c_event);
