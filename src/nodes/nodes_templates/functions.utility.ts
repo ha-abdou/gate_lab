@@ -56,9 +56,7 @@ function loadTemplate() {
 			//todo dependency: []
 			upDateOutputs: function ()
             {
-
-				//this.setOutputValue('c', !this.getInputValue('a') ||
-				// !this.getInputValue('a'));
+				this.setOutputValue('c', !this.getInputLastValue('a') || !this.getInputLastValue('a'));
 			}
 		},
 		display: 

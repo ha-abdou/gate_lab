@@ -5,7 +5,7 @@ class Node
     elm:           SVGElement;
     inputs:        Input[];
     outputs:       Output[];
-    tempaleteAPI:   TempaleteAPI;
+    tempaleteAPI:  TempaleteAPI;
 
     private _upDateOutputs: any;
 
@@ -14,7 +14,7 @@ class Node
     {
         let dragCon: SVGElement;
         let IO:      any;
-        //todo init vars
+        // todo init vars
         this.inputs = [];
         this.outputs = [];
         this.elm = <SVGElement>document.createElementNS(SVGNS, 'g');
@@ -43,8 +43,17 @@ class Node
 
     mapConnections (f: any)
     {
-        let i: number, j: number;
+        this.mapInputs((input: Input, index: number) =>
+        {
+            input.mapConnections(f);
+        });
 
+        this.mapOutputs((output: Output, index: number) =>
+        {
+            output.mapConnections(f);
+        });
+        /*
+        let i: number, j: number;
         for (i = this.inputs.length - 1; i >= 0; i--)
         {
             for (j = this.inputs[i].connections.length - 1; j >= 0; j--)
@@ -55,6 +64,27 @@ class Node
             for (j = this.outputs[i].connections.length - 1; j >= 0; j--)
                 f.call(null, this.outputs[i].connections[j]);
         }
+        */
+    }
+    //todo add index of IO
+    mapInputs (f: any)
+    {
+        let i: number;
+
+        for (i = this.inputs.length - 1; i >= 0; i--)
+        {
+            f.call(null, this.inputs[i], i);
+        }
+    }
+    //todo add index of IO
+    mapOutputs (f:  any)
+    {
+        let i: number;
+
+        for (i = this.outputs.length - 1; i >= 0; i--)
+        {
+            f.call(null, this.outputs[i], i);
+        }
     }
 
     upDateOutputs ()
@@ -64,7 +94,10 @@ class Node
 
     remove ()
     {
-        console.log('todo remove node');
+        let c_event: CustomEvent;
+
+        c_event = new CustomEvent('deleteNode', {detail: {node: this}});
+        document.dispatchEvent(c_event);
     }
     //todo vars
     private onMouseDown(event: Event)

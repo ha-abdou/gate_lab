@@ -22,6 +22,22 @@ class NodesBundler
         return (node);
     }
 
+    popNode(nodeId: string)
+    {
+        let l: number = this.nodesList.length;
+
+        for (let i = 0; i < l ; i++)
+        {
+            if (this.nodesList[i].id === nodeId)
+            {
+                this.nodesList[i].elm.remove();
+                this.nodesList[i] = null;
+                this.nodesList.splice(i, 1);
+                break;
+            }
+        }
+    }
+
     private getTemplate(templateName: string)
     {
         return (this.templateList[templateName]);

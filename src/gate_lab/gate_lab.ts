@@ -19,7 +19,8 @@ class GLab
         document.addEventListener('tryToConnect', this.onTryToConnect.bind(this), false);
         document.addEventListener('nodeStartMoving', GLab.onNodeStartMoving.bind(this), false);
         document.addEventListener('nodeMoved', this.onNodeMoved.bind(this), false);
-        document.addEventListener('deleteConnection', this.deleteConnection.bind(this), false);
+        document.addEventListener('deleteConnection', GLab.deleteConnection.bind(this), false);
+        document.addEventListener('deleteNode', this.deleteNode.bind(this), false);
         //
     }
 
@@ -33,7 +34,22 @@ class GLab
         LABSTATUS = s;
     }
 
-    private deleteConnection(e: CustomEvent)
+    private deleteNode(e: CustomEvent)
+    {
+        let node: Node;
+
+        node = e.detail.node;
+        //todo review this
+        node.mapConnections((seg: Segment, index: number) => {
+            seg.from.removeConnection(seg);
+            seg.to.removeConnection(seg);
+            seg.elm.remove();
+            seg = null;
+        });
+        this.nodesBundler.popNode(node.id);
+    }
+
+    private static deleteConnection(e: CustomEvent)
     {
         let seg: Segment;
 
