@@ -2,9 +2,7 @@
 class Segment
 {
 	elm: 	SVGElement;
-	from: 	Output;
-	to: 	Input;
-	constructor()
+	constructor(public from: Output, public to: Input)
 	{
 		this.elm = <SVGElement>document.createElementNS(SVGNS, 'line');
 		this.elm.setAttributeNS(null, 'style', "stroke:rgb(255,0,0);stroke-width:2");
@@ -23,17 +21,19 @@ class Segment
 		this.elm.style.visibility = "visible";
 	}
 
+	remove ()
+    {
+        this.elm.remove();
+    }
+
 	upDate()
 	{
-		this.elm.setAttributeNS(null, 'x1', this.from.positions.x.toString());
-		this.elm.setAttributeNS(null, 'y1', this.from.positions.y.toString());
-		this.elm.setAttributeNS(null, 'x2', this.to.positions.x.toString());
-		this.elm.setAttributeNS(null, 'y2', this.to.positions.y.toString());
+		this.elm.setAttributeNS(null, 'x1', this.from.globalPosition().x.toString());
+		this.elm.setAttributeNS(null, 'y1', this.from.globalPosition().y.toString());
+		this.elm.setAttributeNS(null, 'x2', this.to.globalPosition().x.toString());
+		this.elm.setAttributeNS(null, 'y2', this.to.globalPosition().y.toString());
 	}
 
-	remove()
-	{
-	}
 	private segmentOnMouseDown()
 	{
 	}

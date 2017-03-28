@@ -1,20 +1,36 @@
 "use strict";
-interface outputConnections
-{
-    to:         Input;
-    segment:    Segment;
-}
 
 class Output
 {
-    connections: outputConnections[];
-    value:       any;
+    connections:   Segment[];
+    private value: any;
 
-    constructor(public elm: SVGElement, public position: Position, public name: string
-        , public parentNode: Node)
+    constructor(public elm: SVGElement, public position: Position, public name: string,
+                public parentNode: Node)
     {
         elm.onmousedown = this.onMouseDown.bind(this);
         elm.property = this;
+        this.connections = [];
+        this.value = null;
+    }
+
+    setValue (value: any)
+    {
+        if (this.value != value)
+        {
+            this.value = value;
+            //todo chain reaction
+            if (this.connections.length > 0)
+            {
+                for (let i = this.connections.length - 1; i >= 0; i--)
+                    this.connections[i].to.setValue(value);
+            }
+        }
+    }
+
+    getValue ()
+    {
+        return (this.value);
     }
 
     globalPosition (): Position

@@ -6,17 +6,18 @@ class GLab
 {
     svgElm:         SVGElement;
     nodesBundler:   NodesBundler;//todo
-    hiddenSegments: Segment[];
 
     constructor (containerId: string)
     {
         this.svgElm = <SVGElement>document.createElementNS(SVGNS, 'svg');
         this.svgElm.id = 'svg-container';
+        this.svgElm.setAttribute('width', '500');
+        this.svgElm.setAttribute('height', '500');
+        this.svgElm.style.opacity = "1";
         document.getElementById(containerId).appendChild(this.svgElm);
         document.addEventListener('tryToConnect', this.onTryToConnect.bind(this), false);
-        //document.addEventListener('nodeStartMoving',
-        // this.onNodeStartMoving, false);
-        //document.addEventListener('nodeMoved', this.onNodeMoved, false);
+        document.addEventListener('nodeStartMoving', GLab.onNodeStartMoving.bind(this), false);
+        document.addEventListener('nodeMoved', this.onNodeMoved.bind(this), false);
         this.nodesBundler = new NodesBundler();
     }
 
@@ -28,13 +29,21 @@ class GLab
     private onTryToConnect(e: CustomEvent)
     {
         this.tryToConnectHandler(e).then(
-            (seg: Segment) => {
+            (success: any) => {
+                let tmp: Segment;
                 //todo check if connection exist
-
+                //if connection not exist
+                if (success.fromEvent.type === 'output')
+                    tmp = new Segment(success.fromEvent.con, success.toEvent.property);
+                else
+                    tmp = new Segment(success.toEvent.property, success.fromEvent.con);
+                success.toEvent.property.connections.push(tmp);
+                success.fromEvent.con.connections.push(tmp);
+                tmp.to.setValue(tmp.from.getValue());
+                //todo update input value;
+                this.svgElm.appendChild(tmp.elm);
             },
-            (seg: Segment) => {
-
-            });
+            (error: any) => {});
     }
 
     private tryToConnectHandler(event: CustomEvent): any
@@ -47,44 +56,40 @@ class GLab
                 tmp_seg.upDate(<Position>{x: e.offsetX, y: e.offsetY});
             };
             document.onmouseup = (e: MouseEvent) => {
+                let att: string;
                 //todo remove path
                 document.onmouseup = null;
                 document.onmousemove = null;
-                //if up on io
-                //   resolve
-                //else
-                //   reject
-                //
-
-                resolve(tmp_seg);
-                /*
                 att = e.path[0].attributes.connectable ? e.path[0].attributes.connectable.value : '';
                 if ((att === 'input' || att === 'output') && e.path[0].nodeName === 'circle'
-                    && att != event.detail.typeName)
-                    resolve(e.path[0]);
+                    && att != event.detail.type)
+                    resolve({fromEvent: event.detail, toEvent: e.path[0]});
                 else
-                    reject("errorrrr");
-                line.remove();
-                line = null;
-                */
+                    reject();
+                tmp_seg.elm.remove();
+                tmp_seg = null;
             }
         });
-
         return (promise);
     }
 
-    private onNodeStartMoving(e: CustomEvent)
+    private static onNodeStartMoving(e: CustomEvent)
     {
-        this.nodesBundler.mapConnections(e.detail.node, (con: any) => {
-            con.segment.hide();
+        e.detail.node.mapConnections((seg: Segment) => {
+            seg.remove();
         });
+        e.detail.node.elm.remove();
+        this.svgElm.appendChild(e.detail.node.elm);
     }
 
     private onNodeMoved(e: CustomEvent)
-    {
+{
         //todo update inputs/outputs positions
-        this.nodesBundler.mapConnections(e.detail.node, (con: any) => {
-            con.segment.show();
+        e.detail.node.mapConnections((seg: Segment) => {
+            seg.upDate();
+            this.svgElm.appendChild(seg.elm);
         });
+        e.detail.node.elm.remove();
+        this.svgElm.appendChild(e.detail.node.elm);
     }
 }

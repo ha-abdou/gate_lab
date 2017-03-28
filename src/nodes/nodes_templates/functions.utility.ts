@@ -11,21 +11,24 @@ function loadTemplate() {
 		{
 			content: `
 			<g class="draggable">
-				<rect width="50" height="50" style="fill:rgb(0,0,255)" />
+				<image xlink:href="img/svg/Logical_and.png" x="0" y="0" height="50" width="95"/>
 			</g>
-			<circle connectable="input" class="connectable input-a" cx="0" cy="15" r="5"/>
-			<circle connectable="input" class="connectable input-b" input-name="b" cx="0" cy="35" r="5"/>
-			<circle connectable="output" class="connectable output-c" cx="50" cy="25" r="5"/>
+			<circle connectable="input" class="connectable input-a" cx="5"
+				cy="13" r="5"/>
+			<circle connectable="input" class="connectable input-b"
+				cx="5" cy="37" r="5"/>
+			<circle connectable="output" class="connectable output-c" cx="95"
+				cy="25" r="5"/>
 			`,
 			inputs: 
 			[
 				{
-					position: {x: 0, y: 15},
+					position: {x: 5, y: 13},
 					name: 'a',
 					elm: {}
 				},
 				{
-					position: {x: 0, y: 35},
+					position: {x: 5, y: 37},
 					name: 'b',
 					elm: {}
 				}
@@ -33,7 +36,7 @@ function loadTemplate() {
 			outputs:
 			[
 				{
-					position: {x: 50, y: 25},
+					position: {x: 95, y: 25},
 					name: 'c',
 					elm: {}
 				}
@@ -46,33 +49,83 @@ function loadTemplate() {
 				return ({inputs: this.inputs, outputs: this.outputs});
 			},
 			//todo dependency: []
-			upDateOutput: function () {
-				//console.log(this);
-				//this.outputs[0].value = !(this.inputs[0].value &&
-				// this.inputs[1].value);
+			afterStart()
+			{
+
+			},
+			//todo dependency: []
+			upDateOutputs: function ()
+            {
+
+				//this.setOutputValue('c', !this.getInputValue('a') ||
+				// !this.getInputValue('a'));
 			}
 		},
 		display: 
 		{
 			content: `
 			<g class="draggable">
-				<rect width="50" height="50" style="fill:rgb(0,0,255)" />
+				<rect width="40" height="40" rx="10" ry="10"
+				    style="fill:#ce0200;stroke:#c0bdbd;stroke-width:5"></rect>
 			</g>
-			<circle connectable="input" class="connectable input-a" cx="0" cy="15" r="5"/>
+			<circle connectable="input" class="connectable input-a" cx="-2"
+				cy="20" r="5"/>
 			`,
 			inputs: 
 			[
 				{
-					positions: {x: 0, y: 15},
+					position: {x: -2, y: 20},
 					name: 'a',
 				}
 			],
 			outputs:
 			[],
+			beforeStart: function (node)
+			{
+				this.inputs[0].elm = node.getElementsByClassName('input-a')[0];
+				return ({inputs: this.inputs, outputs: this.outputs});
+			},
 			//todo dependency: []
-			upDateOutput: function () {
-				//console.log(this);
-				console.log(this.inputs[0].value);
+			upDateOutputs: function ()
+            {
+				if (this.getInputLastValue('a') === true)
+                    this.elm.querySelector(".draggable rect").style.fill = "#ce0200";
+                else
+                    this.elm.querySelector(".draggable rect").style.fill = "#2bce00";
+            }
+		},
+		source:
+		{
+			content: `
+			<g class="draggable">
+				<rect width="40" height="40" rx="10" ry="10"
+				    style="fill:#ce0200;stroke:#c0bdbd;stroke-width:5"></rect>
+			</g>
+			<circle connectable="output" class="connectable output-a" cx="42"
+				cy="20" r="5"/>
+			`,
+			outputs:
+				[
+					{
+						position: {x: 42, y: 20},
+						name: 'a',
+					}
+				],
+			inputs:
+				[],
+			beforeStart: function (node)
+			{
+				this.outputs[0].elm = node.getElementsByClassName('output-a')[0];
+				return ({inputs: this.inputs, outputs: this.outputs});
+			},
+			//todo dependency: []
+			upDateOutputs: function ()
+			{
+				this.setOutputValue('a', true);
+				if (this.getOutputValue('a') === true)
+					this.elm.querySelector(".draggable rect").style.fill = "#ce0200";
+				else
+					this.elm.querySelector(".draggable rect").style.fill = "#2bce00";
 			}
 		}
 	};

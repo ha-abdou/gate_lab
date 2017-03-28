@@ -1,9 +1,14 @@
 "use strict";
+//todo add attr to IO
 class Node
 {
-    elm:      SVGElement;
-    inputs:   Input[];
-    outputs:  Output[];
+    elm:           SVGElement;
+    inputs:        Input[];
+    outputs:       Output[];
+    tempaleteAPI:   TempaleteAPI;
+
+    private _upDateOutputs: any;
+
     constructor(template: any, public position: Position,
                 public id: string)
     {
@@ -14,8 +19,8 @@ class Node
         this.outputs = [];
         this.elm = <SVGElement>document.createElementNS(SVGNS, 'g');
         this.elm.innerHTML = template.content;
-        this.elm.setAttributeNS(null, "class" , 'node');
-        this.elm.setAttributeNS(null, "id" , id);
+        this.elm.setAttributeNS(null, "class", 'node');
+        this.elm.setAttributeNS(null, "id", id);
         this.move(position);
         //add IO
         dragCon = <SVGElement>this.elm.getElementsByClassName('draggable')[0];
@@ -25,6 +30,8 @@ class Node
         this.elm.property = this;
         this.addInputs(IO.inputs);
         this.addOutputs(IO.outputs);
+        this._upDateOutputs = template.upDateOutputs;
+        this.tempaleteAPI = new TempaleteAPI(this);
     }
 
     move (to: Position)
@@ -32,6 +39,27 @@ class Node
         this.position = to;
         this.elm.setAttributeNS(null, "transform" ,
             "translate(" + to.x + ", "+ to.y + ")");
+    }
+
+    mapConnections (f: any)
+    {
+        let i: number, j: number;
+
+        for (i = this.inputs.length - 1; i >= 0; i--)
+        {
+            for (j = this.inputs[i].connections.length - 1; j >= 0; j--)
+                f.call(null, this.inputs[i].connections[j]);
+        }
+        for (i = this.outputs.length - 1; i >= 0; i--)
+        {
+            for (j = this.outputs[i].connections.length - 1; j >= 0; j--)
+                f.call(null, this.outputs[i].connections[j]);
+        }
+    }
+
+    upDateOutputs ()
+    {
+        this._upDateOutputs.call(this.tempaleteAPI);
     }
 
     remove ()
@@ -47,7 +75,7 @@ class Node
             this.remove();
     }
 
-    dragAndDropHandler() {
+    private dragAndDropHandler() {
         let c_event: CustomEvent;
 
         c_event = new CustomEvent('nodeStartMoving', {detail: {node: this}});

@@ -17,11 +17,7 @@ class PreviewSegment
         this.to = to;
         this.elm.setAttributeNS(null, 'x1', this.from.x.toString());
         this.elm.setAttributeNS(null, 'y1', this.from.y.toString());
-        this.elm.setAttributeNS(null, 'x2', to.x.toString());
+        this.elm.setAttributeNS(null, 'x2', (to.x - 3).toString());
         this.elm.setAttributeNS(null, 'y2', to.y.toString());
-    }
-
-    remove()
-    {
     }
 }

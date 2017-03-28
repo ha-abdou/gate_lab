@@ -4,9 +4,9 @@
 "use strict";
 
 function main() {
-    let lab: any = new GLab("lab-svg");
+    lab = new GLab("lab-svg");
 
     lab.loadNode("and");
-//	lab.loadNode("and");
-//	lab.loadNode("display");
+	lab.loadNode("source");
+    lab.loadNode("display");
 }

@@ -18,7 +18,7 @@ class NodesBundler
 
         this.nodesList.push(node);
         //console.log(this.nodesList);
-        //node.upDateOutput();
+        node.upDateOutputs();
         return (node);
     }
 
