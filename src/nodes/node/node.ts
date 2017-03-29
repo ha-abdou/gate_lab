@@ -38,7 +38,7 @@ class Node
     {
         this.position = to;
         this.elm.setAttributeNS(null, "transform" ,
-            "translate(" + to.x + ", "+ to.y + ")");
+            "translate(" + (to.x / SCALE) + ", "+ (to.y / SCALE) + ")");
     }
 
     mapConnections (f: any)
@@ -112,12 +112,12 @@ class Node
         let c_event: CustomEvent;
         let offset: Position;
 
-        offset = <Position>{x: event.pageX - this.position.x,
-                            y: event.pageY - this.position.y};
+        offset = <Position>{x: event.clientX - this.position.x,
+                            y: event.clientY - this.position.y};
         c_event = new CustomEvent('nodeStartMoving', {detail: {node: this}});
         document.dispatchEvent(c_event);
         document.onmousemove = (e) => {
-            this.move(<Position>{x: e.pageX  - offset.x, y: e.pageY - offset.y});
+            this.move(<Position>{x: e.clientX - offset.x, y: e.clientY - offset.y});
         };
         this.elm.onmouseup = () => {
             //todo update inputs/outputs positions

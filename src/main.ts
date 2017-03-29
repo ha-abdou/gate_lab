@@ -6,7 +6,7 @@
 function main() {
     lab = new GLab("lab-svg");
 
-    lab.loadNode("and");
-	lab.loadNode("source");
+  //lab.loadNode("and");
+//	lab.loadNode("source");
     lab.loadNode("display");
 }

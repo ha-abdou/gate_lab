@@ -1,32 +1,39 @@
 /**
  * Created by abdou on 22/03/17.
  */
+//formila
 "use strict";
 class GLab
 {
-    svgElm:         SVGElement;
     nodesBundler:   NodesBundler;//todo
-
+    position:       Position;
+    width:          number;
+    height:         number;
+    svgContainer:   SVGContainer;
     constructor (containerId: string)
     {
-        this.svgElm = <SVGElement>document.createElementNS(SVGNS, 'svg');
-        this.svgElm.id = 'svg-container';
-        this.svgElm.setAttribute('width', '500');
-        this.svgElm.setAttribute('height', '500');
-        this.svgElm.style.opacity = "1";
+        this.width = 200;
+        this.height = 200;
+        this.svgContainer = new SVGContainer(this.width, this.height);
+        document.getElementById(containerId).appendChild(this.svgContainer.elm);
+        this.svgContainer.center();
         this.nodesBundler = new NodesBundler();
-        document.getElementById(containerId).appendChild(this.svgElm);
         document.addEventListener('tryToConnect', this.onTryToConnect.bind(this), false);
-        document.addEventListener('nodeStartMoving', GLab.onNodeStartMoving.bind(this), false);
+        document.addEventListener('nodeStartMoving', this.onNodeStartMoving.bind(this), false);
         document.addEventListener('nodeMoved', this.onNodeMoved.bind(this), false);
-        document.addEventListener('deleteConnection', GLab.deleteConnection.bind(this), false);
+        document.addEventListener('deleteConnection', this.deleteConnection.bind(this), false);
         document.addEventListener('deleteNode', this.deleteNode.bind(this), false);
         //
     }
 
     loadNode (nodeName: string)
     {
-        this.svgElm.appendChild( this.nodesBundler.load(nodeName).elm );
+        let node: Node;
+
+        node = this.nodesBundler.load(nodeName);
+        this.appendNode(node);
+        console.log(this.svgContainer.getCenter(node));
+        node.move(this.svgContainer.getCenter(node));
     }
 
     setStatus (s: number)
@@ -34,11 +41,15 @@ class GLab
         LABSTATUS = s;
     }
 
-    private deleteNode(e: CustomEvent)
+    private appendNode(node: Node)
     {
-        let node: Node;
+        this.svgContainer.elm.appendChild(node.elm);
+    }
 
-        node = e.detail.node;
+    private deleteNode(e: CustomEvent, node: Node = null)
+    {
+        if (e)
+            node = e.detail.node;
         //todo review this
         node.mapConnections((seg: Segment, index: number) => {
             seg.from.removeConnection(seg);
@@ -49,11 +60,20 @@ class GLab
         this.nodesBundler.popNode(node.id);
     }
 
-    private static deleteConnection(e: CustomEvent)
+    private createConnection (from: Output, to: Input)
     {
-        let seg: Segment;
+        let tmp: Segment;
+        //todo check if connection exist
+        tmp = new Segment(from, to);
+        from.addConnection(tmp);
+        to.addConnection(tmp);
+        this.svgContainer.elm.appendChild(tmp.elm);
+    }
 
-        seg = e.detail.segment;
+    private deleteConnection(e: CustomEvent, seg: Segment = null)
+    {
+        if (e)
+            seg = e.detail.segment;
         seg.from.removeConnection(seg);
         seg.to.removeConnection(seg);
         seg.elm.remove();
@@ -64,18 +84,10 @@ class GLab
     {
         this.tryToConnectHandler(e).then(
             (success: any) => {
-                let tmp: Segment;
-                //todo check if connection exist
-                //if connection not exist
                 if (success.fromEvent.type === 'output')
-                tmp = new Segment(success.fromEvent.con, success.toEvent.property);
+                    this.createConnection(success.fromEvent.con, success.toEvent.property);
                 else
-                tmp = new Segment(success.toEvent.property, success.fromEvent.con);
-                success.toEvent.property.connections.push(tmp);
-                success.fromEvent.con.connections.push(tmp);
-                tmp.to.setValue(tmp.from.getValue());
-                //todo update input value;
-                this.svgElm.appendChild(tmp.elm);
+                    this.createConnection(success.toEvent.property, success.fromEvent.con);
             },
             (error: any) => {});
     }
@@ -84,7 +96,7 @@ class GLab
     {
         let tmp_seg = new PreviewSegment(event.detail.con.globalPosition());//preview_segment
 
-        this.svgElm.appendChild(tmp_seg.elm);
+        this.svgContainer.elm.appendChild(tmp_seg.elm);
         let promise = new Promise((resolve: any, reject: any) => {
             document.onmousemove = (e: MouseEvent) => {
                 tmp_seg.upDate(<Position>{x: e.offsetX, y: e.offsetY});
@@ -107,23 +119,24 @@ class GLab
         return (promise);
     }
 
-    private static onNodeStartMoving(e: CustomEvent)
+    private onNodeStartMoving(e: CustomEvent)
     {
         e.detail.node.mapConnections((seg: Segment) => {
             seg.remove();
         });
         e.detail.node.elm.remove();
-        this.svgElm.appendChild(e.detail.node.elm);
+        this.svgContainer.elm.appendChild(e.detail.node.elm);
     }
 
     private onNodeMoved(e: CustomEvent)
-{
+    {
         //todo update inputs/outputs positions
         e.detail.node.mapConnections((seg: Segment) => {
             seg.upDate();
-            this.svgElm.appendChild(seg.elm);
+            this.svgContainer.elm.appendChild(seg.elm);
         });
         e.detail.node.elm.remove();
-        this.svgElm.appendChild(e.detail.node.elm);
+        this.svgContainer.elm.appendChild(e.detail.node.elm);
     }
+
 }

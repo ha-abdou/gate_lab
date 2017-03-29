@@ -32,6 +32,12 @@ class Input
         }
     }
 
+    addConnection (seg: Segment)
+    {
+        this.connections.push(seg);
+        this.setValue(seg.from.getValue());
+    }
+
     removeConnection(seg: Segment)
     {
         this.mapConnections((con: Segment, index: number) => {

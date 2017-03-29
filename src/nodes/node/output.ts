@@ -49,6 +49,11 @@ class Output
         });
     }
 
+    addConnection (seg: Segment)
+    {
+        this.connections.push(seg);
+    }
+
     mapConnections (f: any)
     {
         let i: number;
