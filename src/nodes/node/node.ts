@@ -38,7 +38,7 @@ class Node
     {
         this.position = to;
         this.elm.setAttributeNS(null, "transform" ,
-            "translate(" + (to.x / SCALE) + ", "+ (to.y / SCALE) + ")");
+            "translate(" + (to.x) + ", "+ (to.y) + ")");
     }
 
     mapConnections (f: any)

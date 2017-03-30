@@ -20,8 +20,8 @@ class SVGContainer
         //todo not move out the frame
         this.move(<Position>
         {
-            x: this.elm.parentNode.clientWidth / 2 - (this.width * SCALE) / 2,
-            y: this.elm.parentNode.clientHeight / 2 - (this.height * SCALE) / 2
+            x: this.elm.parentNode.clientWidth / 2 - this.width / 2,
+            y: this.elm.parentNode.clientHeight / 2 - this.height / 2
         });
     }
 
@@ -38,8 +38,8 @@ class SVGContainer
     move (to: Position)
     {
         this.position = to;
-        this.elm.style.left = (to.x / SCALE).toString();
-        this.elm.style.top = (to.y / SCALE).toString();
+        this.elm.style.left = to.x.toString();
+        this.elm.style.top = to.y.toString();
     }
 
     private dragAndDropHandler(event: Event) {

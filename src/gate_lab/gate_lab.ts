@@ -5,19 +5,21 @@
 "use strict";
 class GLab
 {
-    nodesBundler:   NodesBundler;//todo
-    position:       Position;
-    width:          number;
-    height:         number;
-    svgContainer:   SVGContainer;
+    nodesBundler:       NodesBundler;//todo
+    position:           Position;
+    width:              number;
+    height:             number;
+    svgContainer:       SVGContainer;
+    historic_manager:   HistoricManager;
     constructor (containerId: string)
     {
-        this.width = 200;
-        this.height = 200;
+        this.width = 800;
+        this.height = 300;
         this.svgContainer = new SVGContainer(this.width, this.height);
         document.getElementById(containerId).appendChild(this.svgContainer.elm);
         this.svgContainer.center();
         this.nodesBundler = new NodesBundler();
+        this.historic_manager = new HistoricManager();
         document.addEventListener('tryToConnect', this.onTryToConnect.bind(this), false);
         document.addEventListener('nodeStartMoving', this.onNodeStartMoving.bind(this), false);
         document.addEventListener('nodeMoved', this.onNodeMoved.bind(this), false);
@@ -32,7 +34,6 @@ class GLab
 
         node = this.nodesBundler.load(nodeName);
         this.appendNode(node);
-        console.log(this.svgContainer.getCenter(node));
         node.move(this.svgContainer.getCenter(node));
     }
 
@@ -41,13 +42,29 @@ class GLab
         LABSTATUS = s;
     }
 
-    private appendNode(node: Node)
+    undo ()
     {
-        this.svgContainer.elm.appendChild(node.elm);
+        this.historic_manager.undo();
     }
 
-    private deleteNode(e: CustomEvent, node: Node = null)
+    redo ()
     {
+        this.historic_manager.redo();
+    }
+
+    private appendNode(node: Node)
+    {
+        console.log("append ", node);
+        this.svgContainer.elm.appendChild(node.elm);
+        this.historic_manager.push(<Historic>{
+            undo: {func: this.deleteNode, thisArgc: this, argcs: [null, node]},
+            redo: {func: this.appendNode, thisArgc: this, argcs: [node]}
+        });
+    }
+
+    private deleteNode(e: CustomEvent, node: Node)
+    {
+        console.log('delete', node);
         if (e)
             node = e.detail.node;
         //todo review this
@@ -60,20 +77,29 @@ class GLab
         this.nodesBundler.popNode(node.id);
     }
 
-    private createConnection (from: Output, to: Input)
+    private createConnection (from: Output, to: Input, seg: Segment = null)
     {
-        let tmp: Segment;
         //todo check if connection exist
-        tmp = new Segment(from, to);
-        from.addConnection(tmp);
-        to.addConnection(tmp);
-        this.svgContainer.elm.appendChild(tmp.elm);
+        //console.log(from, to);
+        if (!seg)
+            seg = new Segment(from, to);
+        from.addConnection(seg);
+        to.addConnection(seg);
+        this.svgContainer.elm.appendChild(seg.elm);
+        this.historic_manager.push(<Historic>{
+            undo: {func: this.deleteConnection, thisArgc: this, argcs: [null, seg]},
+            redo: {func: this.createConnection, thisArgc: this, argcs: [seg.from, seg.to, seg]}
+        });
     }
 
     private deleteConnection(e: CustomEvent, seg: Segment = null)
     {
         if (e)
             seg = e.detail.segment;
+        this.historic_manager.push(<Historic>{
+            undo: {func: this.createConnection, thisArgc: this, argcs: [seg.from, seg.to]},
+            redo: {func: this.deleteConnection, thisArgc: this, argcs: [null, seg]}
+        });
         seg.from.removeConnection(seg);
         seg.to.removeConnection(seg);
         seg.elm.remove();
