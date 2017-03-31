@@ -14,6 +14,22 @@ class Input
         this.value = null;
     }
 
+    enableConnections ()
+    {
+        this.mapConnections((con: any) => {
+            con.from.addConnection(con);
+            con.show();
+        })
+    }
+
+    disableConnections ()
+    {
+        this.mapConnections((con: any) => {
+            con.from.removeConnection(con);
+            con.hide();
+        })
+    }
+
     globalPosition (): Position
     {
         return (<Position>{

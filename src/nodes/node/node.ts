@@ -94,10 +94,30 @@ class Node
 
     remove ()
     {
-        let c_event: CustomEvent;
-
-        c_event = new CustomEvent('deleteNode', {detail: {node: this}});
-        document.dispatchEvent(c_event);
+        this.elm.remove();
+        this.disableConnections();
+    }
+    //todo if has $timeOut $interval
+    enableConnections ()
+    {
+        this.mapInputs((input: Input) => {
+            input.enableConnections();
+        });
+        this.mapOutputs((output: Output) => {
+            output.enableConnections();
+        });
+        //todo remove ween necessary
+        this.upDateOutputs();
+    }
+    //todo if has $timeOut $interval
+    disableConnections ()
+    {
+        this.mapInputs((input: Input) => {
+            input.disableConnections();
+        });
+        this.mapOutputs((output: Output) => {
+            output.disableConnections();
+        });
     }
     //todo vars
     private onMouseDown(event: Event)
@@ -105,7 +125,7 @@ class Node
         if (LABSTATUS === NORMAL)
             this.dragAndDropHandler(event);
         else if (LABSTATUS === 2)
-            this.remove();
+            document.dispatchEvent(new CustomEvent('deleteNode', {detail: {node: this}}));
     }
 
     private dragAndDropHandler(event: Event) {
@@ -120,8 +140,12 @@ class Node
             this.move(<Position>{x: e.clientX - offset.x, y: e.clientY - offset.y});
         };
         this.elm.onmouseup = () => {
-            //todo update inputs/outputs positions
-            c_event = new CustomEvent('nodeMoved', {detail: {node: this}});
+            //todo update inputs/outputs position
+            c_event = new CustomEvent('nodeMoved', {detail: {node: this,
+                lastPosition: <Position>{
+                    x: (offset.x - event.clientX) * -1,
+                    y: (offset.y - event.clientY) * -1
+                }}});
             document.dispatchEvent(c_event);
             document.onmousemove = null;
             this.elm.onmouseup = null;

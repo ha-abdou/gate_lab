@@ -28,12 +28,14 @@ class GLab
         //
     }
 
+    //todo
     loadNode (nodeName: string)
     {
         let node: Node;
 
         node = this.nodesBundler.load(nodeName);
         this.appendNode(node);
+        //todo review get center
         node.move(this.svgContainer.getCenter(node));
     }
 
@@ -54,27 +56,24 @@ class GLab
 
     private appendNode(node: Node)
     {
-        console.log("append ", node);
-        this.svgContainer.elm.appendChild(node.elm);
+        this.svgContainer.appendChild(node.elm);
+        this.nodesBundler.pushNode(node);
         this.historic_manager.push(<Historic>{
             undo: {func: this.deleteNode, thisArgc: this, argcs: [null, node]},
             redo: {func: this.appendNode, thisArgc: this, argcs: [node]}
         });
     }
 
+    //todo remove node
     private deleteNode(e: CustomEvent, node: Node)
     {
-        console.log('delete', node);
         if (e)
             node = e.detail.node;
-        //todo review this
-        node.mapConnections((seg: Segment, index: number) => {
-            seg.from.removeConnection(seg);
-            seg.to.removeConnection(seg);
-            seg.elm.remove();
-            seg = null;
-        });
         this.nodesBundler.popNode(node.id);
+        this.historic_manager.push(<Historic>{
+            undo: {func: this.appendNode, thisArgc: this, argcs: [node]},
+            redo: {func: this.deleteNode, thisArgc: this, argcs: [null, node]}
+        });
     }
 
     private createConnection (from: Output, to: Input, seg: Segment = null)
@@ -154,15 +153,31 @@ class GLab
         this.svgContainer.elm.appendChild(e.detail.node.elm);
     }
 
-    private onNodeMoved(e: CustomEvent)
+    onNodeMoved(e: CustomEvent, node: Node)
     {
-        //todo update inputs/outputs positions
-        e.detail.node.mapConnections((seg: Segment) => {
+        if (e)
+            node = e.detail.node;
+        node.mapConnections((seg: Segment) => {
             seg.upDate();
-            this.svgContainer.elm.appendChild(seg.elm);
+            this.svgContainer.appendChild(seg.elm);
         });
-        e.detail.node.elm.remove();
-        this.svgContainer.elm.appendChild(e.detail.node.elm);
-    }
+        //todo review this
+        node.elm.remove();
+        this.svgContainer.appendChild(node.elm);
 
+        this.historic_manager.push(<Historic>{
+            undo: {func:
+                function (node: Node, pos: Position){
+                    node.move(pos);
+                    this.onNodeMoved(null, node);
+                },
+                thisArgc: this, argcs: [node, e ? e.detail.lastPosition : null]},
+            redo: {func:
+                function (node: Node, pos: Position){
+                    node.move(pos);
+                    this.onNodeMoved(null, node);
+                },
+                thisArgc: this, argcs: [node, node.position]}
+        });
+    }
 }

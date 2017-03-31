@@ -35,6 +35,11 @@ class SVGContainer
         });
     }
 
+    appendChild (elm: SVGElement)
+    {
+        this.elm.appendChild(elm);
+    }
+
     move (to: Position)
     {
         this.position = to;

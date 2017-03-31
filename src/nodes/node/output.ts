@@ -14,6 +14,22 @@ class Output
         this.value = null;
     }
 
+    enableConnections ()
+    {
+        this.mapConnections((con: any) => {
+            con.to.addConnection(con);
+            con.show();
+        })
+    }
+
+    disableConnections ()
+    {
+        this.mapConnections((con: any) => {
+            con.to.removeConnection(con);
+            con.hide();
+        })
+    }
+
     setValue (value: any)
     {
         if (this.value != value)
