@@ -3,10 +3,10 @@
 class Node
 {
     elm:           SVGElement;
-    inputs:        Input[];
-    outputs:       Output[];
-    tempaleteAPI:  TempaleteAPI;
-
+    private inputs:        Input[];
+    private outputs:       Output[];
+    private tempaleteAPI:  TempaleteAPI;
+    private nodeDependencies:  any[];
     private _upDateOutputs: any;
 
     constructor(template: any, public position: Position,
@@ -32,6 +32,7 @@ class Node
         this.addOutputs(IO.outputs);
         this._upDateOutputs = template.upDateOutputs;
         this.tempaleteAPI = new TempaleteAPI(this);
+        this.makeDependencies();
     }
 
     move (to: Position)
@@ -89,15 +90,26 @@ class Node
 
     upDateOutputs ()
     {
-        this._upDateOutputs.call(this.tempaleteAPI);
+        this._upDateOutputs.run(this.tempaleteAPI, this.nodeDependencies[1]);
     }
 
     remove ()
     {
         this.elm.remove();
-        this.disableConnections();
     }
-    //todo if has $timeOut $interval
+
+    enable ()
+    {
+        this.enableIntervalsTimeouts();
+        this.enableConnections();
+    }
+
+    disable()
+    {
+        this.disableConnections();
+        this.disableIntervalsTimeouts();
+    }
+
     enableConnections ()
     {
         this.mapInputs((input: Input) => {
@@ -109,7 +121,7 @@ class Node
         //todo remove ween necessary
         this.upDateOutputs();
     }
-    //todo if has $timeOut $interval
+
     disableConnections ()
     {
         this.mapInputs((input: Input) => {
@@ -118,6 +130,30 @@ class Node
         this.mapOutputs((output: Output) => {
             output.disableConnections();
         });
+    }
+
+    enableIntervalsTimeouts ()
+    {
+        for (let interval in this.nodeDependencies[0].intervals)
+        {
+            this.nodeDependencies[0].intervals[interval].pause = false;
+        }
+        for (let timeout in this.nodeDependencies[0].timeouts)
+        {
+            this.nodeDependencies[0].timeouts[timeout].pause = false;
+        }
+    }
+
+    disableIntervalsTimeouts ()
+    {
+        for (let interval in this.nodeDependencies[0].intervals)
+        {
+            this.nodeDependencies[0].intervals[interval].pause = true;
+        }
+        for (let timeout in this.nodeDependencies[0].timeouts)
+        {
+            this.nodeDependencies[0].timeouts[timeout].pause = true;
+        }
     }
     //todo vars
     private onMouseDown(event: Event)
@@ -128,7 +164,8 @@ class Node
             document.dispatchEvent(new CustomEvent('deleteNode', {detail: {node: this}}));
     }
 
-    private dragAndDropHandler(event: Event) {
+    private dragAndDropHandler(event: Event)
+    {
         let c_event: CustomEvent;
         let offset: Position;
 
@@ -152,15 +189,51 @@ class Node
         };
     }
 
-    private addOutputs(outputs: Output[]):void {
+    private addOutputs(outputs: Output[]):void
+    {
         for (let i = outputs.length - 1; i >= 0 ; i--)
             this.outputs.push(new Output(outputs[i].elm, outputs[i].position,
                 outputs[i].name, this));
     }
 
-    private addInputs(inputs: Input[]):void {
+    private addInputs(inputs: Input[]):void
+    {
         for (let i = inputs.length - 1; i >= 0 ; i--)
             this.inputs.push(new Input(inputs[i].elm, inputs[i].position,
                 inputs[i].name, this));
+    }
+
+    private makeDependencies ()
+    {
+        //todo check template dependencies
+        this.nodeDependencies =
+        [
+            {
+                intervals: [],
+                timeouts: []
+            },
+            {
+                '$scope': {},
+                '$timeout': (func: any, time: number) => {
+                    $timeout(func, time, this.nodeDependencies[0].timeouts)
+                },
+                '$clearTimeout': (tId: number) =>
+                {
+                    $clearTimeout(tId, this.nodeDependencies[0].timeouts)
+                },
+                '$interval': (func: any, time: number) => {
+                    $interval (func, time, this.nodeDependencies[0].intervals)
+                },
+                '$clearInterval': (iId: number) =>
+                {
+                    $clearInterval(iId, this.nodeDependencies[0].intervals)
+                }
+            }
+        ];
+    }
+
+    private makeNode()
+    {
+
     }
 }

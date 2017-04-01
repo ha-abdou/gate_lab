@@ -20,13 +20,11 @@ class HistoricManager
     {
         if (!this.isRedo && !this.isUndo)
         {
-            console.log('push');
             if (this.historicIndex + 1 < this.historics.length)
                 this.historics.splice(this.historicIndex + 1,
                     this.historics.length - this.historicIndex );
             this.historics.push(historic);
             this.historicIndex++;
-            console.log(this.historicIndex, this.historics.length);
         }
 
     }
@@ -37,7 +35,6 @@ class HistoricManager
 
         if (this.historicIndex >= 0)
         {
-            console.log('undo');
             this.isUndo = true;
             his = this.historics[this.historicIndex];
             his.undo.func.apply(his.undo.thisArgc, his.undo.argcs);
@@ -52,7 +49,6 @@ class HistoricManager
 
         if (this.historicIndex < this.historics.length - 1)
         {
-            console.log('redo');
             this.isRedo = true;
             his = this.historics[this.historicIndex + 1];
             his.redo.func.apply(his.redo.thisArgc, his.redo.argcs);

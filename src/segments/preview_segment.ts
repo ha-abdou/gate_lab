@@ -12,6 +12,11 @@ class PreviewSegment
         this.elm.property = this;
     }
 
+    remove ()
+    {
+        this.elm.remove();
+    }
+
     upDate(to: Position)
     {
         this.to = to;

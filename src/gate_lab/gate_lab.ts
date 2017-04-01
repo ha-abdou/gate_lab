@@ -25,7 +25,6 @@ class GLab
         document.addEventListener('nodeMoved', this.onNodeMoved.bind(this), false);
         document.addEventListener('deleteConnection', this.deleteConnection.bind(this), false);
         document.addEventListener('deleteNode', this.deleteNode.bind(this), false);
-        //
     }
 
     //todo
@@ -63,9 +62,8 @@ class GLab
             redo: {func: this.appendNode, thisArgc: this, argcs: [node]}
         });
     }
-
     //todo remove node
-    private deleteNode(e: CustomEvent, node: Node)
+    private deleteNode(e: CustomEvent, node: Node = null)
     {
         if (e)
             node = e.detail.node;
@@ -79,12 +77,11 @@ class GLab
     private createConnection (from: Output, to: Input, seg: Segment = null)
     {
         //todo check if connection exist
-        //console.log(from, to);
         if (!seg)
             seg = new Segment(from, to);
         from.addConnection(seg);
         to.addConnection(seg);
-        this.svgContainer.elm.appendChild(seg.elm);
+        this.svgContainer.appendChild(seg.elm);
         this.historic_manager.push(<Historic>{
             undo: {func: this.deleteConnection, thisArgc: this, argcs: [null, seg]},
             redo: {func: this.createConnection, thisArgc: this, argcs: [seg.from, seg.to, seg]}
@@ -101,8 +98,7 @@ class GLab
         });
         seg.from.removeConnection(seg);
         seg.to.removeConnection(seg);
-        seg.elm.remove();
-        seg = null;
+        seg.remove();
     }
 
     private onTryToConnect(e: CustomEvent)
@@ -119,9 +115,9 @@ class GLab
 
     private tryToConnectHandler(event: CustomEvent): any
     {
-        let tmp_seg = new PreviewSegment(event.detail.con.globalPosition());//preview_segment
+        let tmp_seg = new PreviewSegment(event.detail.con.globalPosition());
 
-        this.svgContainer.elm.appendChild(tmp_seg.elm);
+        this.svgContainer.appendChild(tmp_seg.elm);
         let promise = new Promise((resolve: any, reject: any) => {
             document.onmousemove = (e: MouseEvent) => {
                 tmp_seg.upDate(<Position>{x: e.offsetX, y: e.offsetY});
@@ -137,7 +133,7 @@ class GLab
                     resolve({fromEvent: event.detail, toEvent: e.path[0]});
                 else
                     reject();
-                tmp_seg.elm.remove();
+                tmp_seg.remove();
                 tmp_seg = null;
             }
         });
@@ -149,11 +145,12 @@ class GLab
         e.detail.node.mapConnections((seg: Segment) => {
             seg.remove();
         });
+        //todo review this
         e.detail.node.elm.remove();
-        this.svgContainer.elm.appendChild(e.detail.node.elm);
+        this.svgContainer.appendChild(e.detail.node.elm);
     }
 
-    onNodeMoved(e: CustomEvent, node: Node)
+    private onNodeMoved(e: CustomEvent, node: Node = null)
     {
         if (e)
             node = e.detail.node;
@@ -164,20 +161,17 @@ class GLab
         //todo review this
         node.elm.remove();
         this.svgContainer.appendChild(node.elm);
-
+        //
+        function undoNodeMoved (node: Node, pos: Position)
+        {
+            node.move(pos);
+            this.onNodeMoved(null, node);
+        }
         this.historic_manager.push(<Historic>{
-            undo: {func:
-                function (node: Node, pos: Position){
-                    node.move(pos);
-                    this.onNodeMoved(null, node);
-                },
-                thisArgc: this, argcs: [node, e ? e.detail.lastPosition : null]},
-            redo: {func:
-                function (node: Node, pos: Position){
-                    node.move(pos);
-                    this.onNodeMoved(null, node);
-                },
-                thisArgc: this, argcs: [node, node.position]}
+            undo: {func: undoNodeMoved, thisArgc: this,
+                argcs: [node, e ? e.detail.lastPosition : null]},
+            redo: {func: undoNodeMoved,thisArgc: this,
+                argcs: [node, node.position]}
         });
     }
 }
