@@ -3,6 +3,7 @@
 class Input
 {
     connections:   Segment[];
+    onValueChange: any;
     private value: any;
 
     constructor(public elm: SVGElement, public position: Position, public name: string,
@@ -43,8 +44,7 @@ class Input
         if (this.value != value)
         {
             this.value = value;
-            //todo push to stack executer
-            this.parentNode.upDateOutputs();
+            this.onValueChange();
         }
     }
 
@@ -64,7 +64,6 @@ class Input
                     this.setValue(null);
                 else
                     this.setValue(this.connections[0].from.getValue());
-                this.parentNode.upDateOutputs();
             }
         });
     }

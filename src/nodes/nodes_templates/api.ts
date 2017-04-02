@@ -3,21 +3,26 @@
  */
 class TempaleteAPI{
     elm: SVGElement;
+
     constructor (private node: Node)
     {
         this.elm = node.elm;
     }
 
+    onInputValueChange (name: string, f: any)
+    {
+        this.node.mapInputs((input) =>{
+            if (input.name === name)
+                input.onValueChange = f;
+        })
+    }
+
     setOutputValue (name: string, value: any)
     {
-        for (let i = this.node.outputs.length - 1; i >= 0; i--)
-        {
-            if (this.node.outputs[i].name === name)
-            {
-                this.node.outputs[i].setValue(value);
-                break;
-            }
-        }
+        this.node.mapOutputs((output) => {
+            if (output.name === name)
+                output.setValue(value);
+        });
     }
 
     getInputValues (name: string): any[]
@@ -43,5 +48,4 @@ class TempaleteAPI{
                 return (this.node.outputs[i].getValue());
         return (null);
     }
-
 }

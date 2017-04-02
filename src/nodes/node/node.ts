@@ -7,7 +7,6 @@ class Node
     private outputs:       Output[];
     private tempaleteAPI:  TempaleteAPI;
     private nodeDependencies:  any[];
-    private _upDateOutputs: any;
 
     constructor(template: any, public position: Position,
                 public id: string)
@@ -26,13 +25,16 @@ class Node
         dragCon = <SVGElement>this.elm.getElementsByClassName('draggable')[0];
         //todo bind(this)
         dragCon.onmousedown = this.onMouseDown.bind(this);
-        IO = template.beforeStart(this.elm);
+        this.makeDependencies();
+        this.tempaleteAPI = new TempaleteAPI(this);
+
+        IO = template.beforeStart.call(this.elm);
         this.elm.property = this;
         this.addInputs(IO.inputs);
         this.addOutputs(IO.outputs);
-        this._upDateOutputs = template.upDateOutputs;
-        this.tempaleteAPI = new TempaleteAPI(this);
-        this.makeDependencies();
+        //todo after start
+        template.afterStart.run(this.tempaleteAPI, this.nodeDependencies[1]);
+
     }
 
     move (to: Position)
@@ -53,19 +55,6 @@ class Node
         {
             output.mapConnections(f);
         });
-        /*
-        let i: number, j: number;
-        for (i = this.inputs.length - 1; i >= 0; i--)
-        {
-            for (j = this.inputs[i].connections.length - 1; j >= 0; j--)
-                f.call(null, this.inputs[i].connections[j]);
-        }
-        for (i = this.outputs.length - 1; i >= 0; i--)
-        {
-            for (j = this.outputs[i].connections.length - 1; j >= 0; j--)
-                f.call(null, this.outputs[i].connections[j]);
-        }
-        */
     }
     //todo add index of IO
     mapInputs (f: any)
@@ -87,12 +76,7 @@ class Node
             f.call(null, this.outputs[i], i);
         }
     }
-
-    upDateOutputs ()
-    {
-        this._upDateOutputs.run(this.tempaleteAPI, this.nodeDependencies[1]);
-    }
-
+    //
     remove ()
     {
         this.elm.remove();
@@ -100,14 +84,14 @@ class Node
 
     enable ()
     {
-        this.enableIntervalsTimeouts();
         this.enableConnections();
+        this.enableIntervalsTimeouts();
     }
 
-    disable()
+    disable ()
     {
-        this.disableConnections();
         this.disableIntervalsTimeouts();
+        this.disableConnections();
     }
 
     enableConnections ()
@@ -118,8 +102,6 @@ class Node
         this.mapOutputs((output: Output) => {
             output.enableConnections();
         });
-        //todo remove ween necessary
-        this.upDateOutputs();
     }
 
     disableConnections ()
@@ -131,7 +113,7 @@ class Node
             output.disableConnections();
         });
     }
-
+    //todo redo
     enableIntervalsTimeouts ()
     {
         for (let interval in this.nodeDependencies[0].intervals)
@@ -143,7 +125,7 @@ class Node
             this.nodeDependencies[0].timeouts[timeout].pause = false;
         }
     }
-
+    //todo redo
     disableIntervalsTimeouts ()
     {
         for (let interval in this.nodeDependencies[0].intervals)
@@ -161,7 +143,8 @@ class Node
         if (LABSTATUS === NORMAL)
             this.dragAndDropHandler(event);
         else if (LABSTATUS === 2)
-            document.dispatchEvent(new CustomEvent('deleteNode', {detail: {node: this}}));
+            document.dispatchEvent(new CustomEvent('deleteNode',
+                {detail: {node: this}}));
     }
 
     private dragAndDropHandler(event: Event)
@@ -177,7 +160,6 @@ class Node
             this.move(<Position>{x: e.clientX - offset.x, y: e.clientY - offset.y});
         };
         this.elm.onmouseup = () => {
-            //todo update inputs/outputs position
             c_event = new CustomEvent('nodeMoved', {detail: {node: this,
                 lastPosition: <Position>{
                     x: (offset.x - event.clientX) * -1,
@@ -199,10 +181,12 @@ class Node
     private addInputs(inputs: Input[]):void
     {
         for (let i = inputs.length - 1; i >= 0 ; i--)
+        {
             this.inputs.push(new Input(inputs[i].elm, inputs[i].position,
-                inputs[i].name, this));
+                inputs[i].name, this, inputs[i].onValueChange));
+        }
     }
-
+    //todo review
     private makeDependencies ()
     {
         //todo check template dependencies

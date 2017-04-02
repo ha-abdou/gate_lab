@@ -15,13 +15,14 @@ class NodesBundler
     {
         let	node: Node = new Node(this.getTemplate(nodeName),
             <Position>{x: 10, y: 10}, <string>uid());
+
         return (node);
     }
 
     pushNode (node: Node)
     {
         this.nodesList.push(node);
-        node.enableConnections();
+        node.enable();
     }
 
     popNode(nodeId: string)
@@ -32,6 +33,7 @@ class NodesBundler
         {
             if (this.nodesList[i].id === nodeId)
             {
+                this.nodesList[i].disable();
                 this.nodesList[i].remove();
                 this.nodesList.splice(i, 1);
                 break;

@@ -35,7 +35,6 @@ class Output
         if (this.value != value)
         {
             this.value = value;
-            //todo chain reaction
             if (this.connections.length > 0)
             {
                 for (let i = this.connections.length - 1; i >= 0; i--)
