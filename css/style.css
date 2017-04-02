@@ -16,6 +16,7 @@
     -ms-user-select: none;
     user-select: none;
 }
+/*
 #lab-svg{
     background-color: #57779b;
     position: absolute;
@@ -24,11 +25,12 @@
     left:60px;
     top:60px;
 }
-
+*/
 #lab-svg svg{
 /*    zoom: 1;
     -moz-transform: scale(1);
     -moz-transform-origin: 0 0; */
+    z-index: -100;
     opacity: 0.9;
     border: 2px black solid;
     background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIj48L3JlY3Q+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNjY2MiPjwvcmVjdD4KPC9zdmc+");

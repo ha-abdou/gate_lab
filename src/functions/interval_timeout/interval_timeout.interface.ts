@@ -1,8 +1,10 @@
 interface intervalTimeout
 {
-    pause:  boolean,
+    pause:   any,
+    unPause: any,
+    isPause: boolean,
     func:    any,
     time:    number,
-    startAt: Date,
+    startAt: number,
     tId:     number
 }

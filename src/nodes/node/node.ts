@@ -117,25 +117,17 @@ class Node
     enableIntervalsTimeouts ()
     {
         for (let interval in this.nodeDependencies[0].intervals)
-        {
-            this.nodeDependencies[0].intervals[interval].pause = false;
-        }
+            this.nodeDependencies[0].intervals[interval].unPause();
         for (let timeout in this.nodeDependencies[0].timeouts)
-        {
-            this.nodeDependencies[0].timeouts[timeout].pause = false;
-        }
+            this.nodeDependencies[0].timeouts[timeout].unPause();
     }
     //todo redo
     disableIntervalsTimeouts ()
     {
         for (let interval in this.nodeDependencies[0].intervals)
-        {
-            this.nodeDependencies[0].intervals[interval].pause = true;
-        }
+            this.nodeDependencies[0].intervals[interval].pause();
         for (let timeout in this.nodeDependencies[0].timeouts)
-        {
-            this.nodeDependencies[0].timeouts[timeout].pause = true;
-        }
+            this.nodeDependencies[0].timeouts[timeout].pause();
     }
     //todo vars
     private onMouseDown(event: Event)
@@ -183,7 +175,7 @@ class Node
         for (let i = inputs.length - 1; i >= 0 ; i--)
         {
             this.inputs.push(new Input(inputs[i].elm, inputs[i].position,
-                inputs[i].name, this, inputs[i].onValueChange));
+                inputs[i].name, this));
         }
     }
     //todo review

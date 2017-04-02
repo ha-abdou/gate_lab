@@ -13,8 +13,8 @@ class GLab
     historic_manager:   HistoricManager;
     constructor (containerId: string)
     {
-        this.width = 800;
-        this.height = 300;
+        this.width = 2400;
+        this.height = 1350;
         this.svgContainer = new SVGContainer(this.width, this.height);
         document.getElementById(containerId).appendChild(this.svgContainer.elm);
         this.svgContainer.center();
@@ -31,16 +31,25 @@ class GLab
     loadNode (nodeName: string)
     {
         let node: Node;
+        let cen:  Position;
 
         node = this.nodesBundler.load(nodeName);
         this.appendNode(node);
-        //todo review get center
-        node.move(this.svgContainer.getCenter(node));
+        cen = this.svgContainer.getCenter(node);
+        node.move(<Position>{
+            x: cen.x - node.elm.getBBox().width / 2,
+            y: cen.y - node.elm.getBBox().height / 2
+        });
     }
 
     setStatus (s: number)
     {
         LABSTATUS = s;
+        if (s === ZOOMOUT)
+        {
+            this.svgContainer.zoomOut();
+            LABSTATUS = NORMAL;
+        }
     }
 
     undo ()
@@ -125,18 +134,19 @@ class GLab
             document.onmouseup = (e: MouseEvent) => {
                 let upElm:  SVGElement;
 
+                tmp_seg.remove();
+                tmp_seg = null;
                 upElm = <SVGElement>document.elementFromPoint(e.pageX, e.pageY);
                 document.onmouseup = null;
                 document.onmousemove = null;
-                if (upElm.property &&
-                        (upElm.property instanceof Input
-                            ||
-                        upElm.property instanceof Output))
+                if (upElm.property
+                    &&
+                    (upElm.property instanceof Input || upElm.property instanceof Output)
+                    &&
+                    upElm.property.constructor.name !== event.detail.con.constructor.name)
                     resolve({fromEvent: event.detail, toEvent: upElm});
                 else
                     reject();
-                tmp_seg.remove();
-                tmp_seg = null;
             }
         });
         return (promise);

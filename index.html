@@ -28,10 +28,10 @@
 </div>
 -->
 <div class="container">
-    <ul id="menu" class="menu-main">
+    <ul id="menu" class="menu-main"  style="border-bottom: 1px solid;">
         <li class="trigger">
             <a class="icon icon-menu"><span>Menu</span></a>
-            <nav class="menu-wrapper open-part" style="z-index: 100">
+            <nav class="menu-wrapper open-part" style="z-index: 100;border-right: 1px solid;">
                 <div class="scroller">
                     <ul class="menu">
                         <li class="search-item">
@@ -69,7 +69,7 @@
                         </li>
 
                         <li>
-                            <a><span class="fa fa-square-o"></span>FlipFlop</a>
+                            <a><span class="fa fa-square-o"></span> FlipFlop</a>
                             <ul class="submenu">
                                 <li><a onclick="lab1.addNode('flipFlopT')"><span class="fa fa-picture-o"></span>T</a></li>
                             </ul>
@@ -81,7 +81,7 @@
             </nav>
         </li>
         <li>
-            <ul id="sortable" class="menu-sort">
+            <ul class="menu-sort">
                 <li><a onclick="lab.setStatus(NORMAL)">Edit</a></li>
                 <li><a onclick="lab.setStatus(DELETE)">Delete</a></li>
                 <li><a onclick="lab.svgContainer.center()">Center</a></li>
@@ -97,7 +97,7 @@
             </ul>
         </li>
     </ul>
-    <div id="lab-svg" style="z-index: -100;border: 1px solid black">
+    <div id="lab-svg">
 
     </div>
 </div><!-- /container -->

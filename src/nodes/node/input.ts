@@ -94,6 +94,8 @@ class Input
     {
         let c_event: CustomEvent;
 
+        if (LABSTATUS !== NORMAL)
+            return;
         this.elm.onmouseup = () => {
             this.elm.onmouseup = null;
             this.elm.onmousemove = null;
