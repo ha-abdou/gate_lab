@@ -123,14 +123,16 @@ class GLab
                 tmp_seg.upDate(<Position>{x: e.offsetX, y: e.offsetY});
             };
             document.onmouseup = (e: MouseEvent) => {
-                let att: string;
-                //todo remove path
+                let upElm:  SVGElement;
+
+                upElm = <SVGElement>document.elementFromPoint(e.pageX, e.pageY);
                 document.onmouseup = null;
                 document.onmousemove = null;
-                att = e.path[0].attributes.connectable ? e.path[0].attributes.connectable.value : '';
-                if ((att === 'input' || att === 'output') && e.path[0].nodeName === 'circle'
-                    && att != event.detail.type)
-                    resolve({fromEvent: event.detail, toEvent: e.path[0]});
+                if (upElm.property &&
+                        (upElm.property instanceof Input
+                            ||
+                        upElm.property instanceof Output))
+                    resolve({fromEvent: event.detail, toEvent: upElm});
                 else
                     reject();
                 tmp_seg.remove();
