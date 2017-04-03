@@ -14,7 +14,7 @@ class NodesBundler
     load (nodeName: string): Node
     {
         let	node: Node = new Node(this.getTemplate(nodeName),
-            <Position>{x: 10, y: 10}, <string>uid());
+            <Position>{x: 10, y: 10}, <string>uid(), nodeName);
 
         return (node);
     }
@@ -41,7 +41,7 @@ class NodesBundler
         }
     }
     //todo
-    private getTemplate(templateName: string)
+    getTemplate(templateName: string)
     {
         return (this.templateList[templateName]);
     }

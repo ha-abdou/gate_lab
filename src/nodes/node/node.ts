@@ -2,14 +2,14 @@
 //todo add attr to IO
 class Node
 {
-    elm:           SVGElement;
-    private inputs:        Input[];
-    private outputs:       Output[];
-    private tempaleteAPI:  TempaleteAPI;
-    private nodeDependencies:  any[];
+    elm:                SVGElement;
+    nodeDependencies:   any[];
+    private inputs:             Input[];
+    private outputs:            Output[];
+    private tempaleteAPI:       TempaleteAPI;
 
     constructor(template: any, public position: Position,
-                public id: string)
+                public id: string, public name: string)
     {
         let dragCon: SVGElement;
         let IO:      any;
