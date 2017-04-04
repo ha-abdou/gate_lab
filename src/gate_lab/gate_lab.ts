@@ -66,18 +66,46 @@ class GLab
 
     save ()
     {
-        //save on local
-        this.saver.save();
-    }
+        let file: string;
 
-    get ()
-    {
-        console.log(this.saver.save());
+        file = this.saver.save();
+        localStorage.setItem('save', file);
     }
 
     load ()
     {
-        this.saver.open(prompt());
+        let tmp: string;
+
+        tmp = this.saver.save();
+        this.deleteAllNodes();
+        if (this.saver.open(localStorage.getItem('save')))
+            this.historic_manager.clear();
+        else
+            this.saver.open(tmp);
+    }
+    //todo
+    download ()
+    {
+        let name: string;
+        let file: string;
+
+        name = prompt('file name: ','logic_gate.json');
+        file = this.saver.save();
+        download(file, name, 'text/plain');
+    }
+
+    upLoad ()
+    {
+        let s:   string;
+        let tmp: string;
+
+        s = prompt('enter:');
+        tmp = this.saver.save();
+        this.deleteAllNodes();
+        if (s && this.saver.open(s))
+            this.historic_manager.clear();
+        else
+            this.saver.open(tmp);
     }
 
     deleteAllNodes ()
@@ -211,3 +239,8 @@ class GLab
         });
     }
 }
+
+/*
+ {"
+ svgContainer":{"width":2400,"height":1350,"position":{"x":-541.5,"y":-303},"scale":1},"nodesBundler":{"nodesList":[{"name":"display","position":{"x":1176.5,"y":655},"uid":"_6e7a2","connections":[]}]}}
+ */

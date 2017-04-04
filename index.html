@@ -82,23 +82,20 @@
         </li>
         <li>
             <ul class="menu-sort">
-                <li><a onclick="lab.setStatus(NORMAL)">Edit</a></li>
-                <li><a onclick="lab.setStatus(DELETE)">Delete</a></li>
-                <li><a onclick="lab.svgContainer.center()">Center</a></li>
-                <li><a onclick="console.log(lab.nodesBundler.nodesList)">debug</a></li>
+                <li><a onclick="lab.undo()">Undo<span class="fa fa-undo"></span></a></li>
+                <li><a onclick="lab.redo()">Redo<span class="fa fa-repeat"></span></a></li>
+                <li><a onclick="lab.setStatus(NORMAL)">Edit <i class="fa fa-pencil-square-o fa-lg"></i></a></li>
+                <li><a onclick="lab.setStatus(DELETE)">Delete <i class="fa fa-eraser fa-lg"></i></a></li>
+                <li><a onclick="lab.svgContainer.center()">Center<span class="fa fa-arrows"></span></a></li>
+                <li><a onclick="lab.save()">Save<span class="fa fa-floppy-o"></span></a></li>
+                <li><a onclick="lab.load()">Load<span class="fa fa-cloud-upload" aria-hidden="true"></span></a></li>
+                <li><a onclick="lab.download()">Download<span class="fa fa-download"></span></a></li>
+                <li><a onclick="lab.upLoad()">UpLoad<span class="fa fa-upload" aria-hidden="true"></span></a></li>
+                <!--<li><a onclick="console.log(lab.nodesBundler.nodesList)">
+                    debug</a></li>--&gt;<i class="" aria-hidden="true"></i>-->
             </ul>
         </li>
         <li>
-            <ul class="account">
-                <li><a onclick="lab.undo()">Undo<span class="fa fa-undo"></span></a></li>
-                <li><a onclick="lab.redo()">Redo<span class="fa fa-repeat"></span></a></li>
-                <li><a onclick="lab.save()">Save<span class="fa fa-floppy-o"></span></a></li>
-                <li><a onclick="lab.load()">load<span
-                        class="fa fa-floppy-o"></span></a></li>
-                <li><a onclick="lab.get()">get<span
-                        class="fa fa-floppy-o"></span></a></li>
-                <li><a>LogOut<span class="fa fa-user"></span></a></li>
-            </ul>
         </li>
     </ul>
     <div id="lab-svg">

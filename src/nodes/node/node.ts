@@ -7,9 +7,9 @@ class Node
     private inputs:             Input[];
     private outputs:            Output[];
     private tempaleteAPI:       TempaleteAPI;
-
+    //todo bootstrap node
     constructor(template: any, public position: Position,
-                public id: string, public name: string)
+                public id: string, public name: string, public $scope: {} = {})
     {
         let dragCon: SVGElement;
         let IO:      any;
@@ -28,7 +28,7 @@ class Node
         this.makeDependencies();
         this.tempaleteAPI = new TempaleteAPI(this);
 
-        IO = template.beforeStart.call(this.elm);
+        IO = template.beforeStart.run(this.elm, this.nodeDependencies[1]);
         this.elm.property = this;
         this.addInputs(IO.inputs);
         this.addOutputs(IO.outputs);
@@ -181,7 +181,6 @@ class Node
     //todo review
     private makeDependencies ()
     {
-        //todo check template dependencies
         this.nodeDependencies =
         [
             {
@@ -189,7 +188,7 @@ class Node
                 timeouts: []
             },
             {
-                '$scope': {},
+                '$scope': this.$scope,
                 '$timeout': (func: any, time: number) => {
                     $timeout(func, time, this.nodeDependencies[0].timeouts)
                 },

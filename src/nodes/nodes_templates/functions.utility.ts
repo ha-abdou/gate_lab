@@ -70,7 +70,7 @@ function loadTemplate() {
 			<circle connectable="input" class="connectable input-a" cx="-2"
 				cy="20" r="5"/>
 			`,
-			beforeStart: function ()
+			beforeStart: function ($scope)
 			{
                 let inputs =
                     [
@@ -82,7 +82,7 @@ function loadTemplate() {
                     ];
 				return ({inputs: inputs, outputs: []});
 			},
-            afterStart: function ()
+            afterStart: function ($scope)
             {
                 this.onInputValueChange('a', () =>{
                     if (this.getInputLastValue('a') !== true)

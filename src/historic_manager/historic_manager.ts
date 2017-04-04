@@ -56,4 +56,10 @@ class HistoricManager
             this.isRedo = false;
         }
     }
+
+    clear ()
+    {
+        this.historicIndex = -1;
+        this.historics = [];
+    }
 }

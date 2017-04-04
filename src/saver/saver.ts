@@ -20,14 +20,21 @@ class Saver
         return (JSON.stringify(this.copy));
     }
 
-    open (copy: string)
+    open (copy: string): boolean
     {
-        this.conStack = [];
-        this.oCopy = JSON.parse(copy);
-        this.createSVGContainer();
-        this.createNodes();
-        this.createConnections();
-        console.log("open donne");
+        try
+        {
+            this.conStack = [];
+            this.oCopy = JSON.parse(copy);
+            this.createSVGContainer();
+            this.createNodes();
+            this.createConnections();
+        }
+        catch (e)
+        {
+            return (false);
+        }
+        return (true);
     }
 
     private createConnections ()
@@ -58,6 +65,7 @@ class Saver
     {
         for (let node in this.oCopy.nodesBundler.nodesList)
             this.createNode(this.oCopy.nodesBundler.nodesList[node]);
+
     }
 
     private createNode (nodeInfo: {})
@@ -68,17 +76,17 @@ class Saver
             this.sandBox.nodesBundler.getTemplate(nodeInfo.name),
             nodeInfo.position,
             nodeInfo.uid,
-            nodeInfo.name
+            nodeInfo.name,
+            nodeInfo.$scope
         );
-        if (nodeInfo.hasOwnProperty('scope'))
-            node.nodeDependencies[1].scope = nodeInfo.scope;
+
         this.sandBox.appendNode(node);
         this.conStack = this.conStack.concat(nodeInfo.connections);
     }
 
     private createSVGContainer ()
     {
-        //todo
+        this.sandBox.svgContainer.move(this.oCopy.svgContainer.position);
     }
 
     private saveNodes ()
@@ -96,7 +104,7 @@ class Saver
             name:       node.name,
             position:   node.position,
             uid:        node.id,
-            scope:      node.nodeDependencies[1].scope,
+            $scope:     node.nodeDependencies[1]['$scope'],
             connections: []
         };
         node.mapOutputs((output: Output)=>{
