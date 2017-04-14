@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="css/component.css" />
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
 
     <script src="js/modernizr.custom.js"></script>
     <script src="js/jquery.js"></script>
@@ -28,7 +29,7 @@
 </div>
 -->
 <div class="container">
-    <ul id="menu" class="menu-main"  style="border-bottom: 1px solid;">
+    <ul id="menu" class="menu-main">
         <li class="trigger">
             <a class="icon icon-menu"><span>Menu</span></a>
             <nav class="menu-wrapper open-part" style="z-index: 100;border-right: 1px solid;">
@@ -42,7 +43,22 @@
                             <a><span class="fa fa-square"></span>Logic Operator</a>
                             <ul class="submenu">
                                 <li><a onclick="lab.loadNode('and')"><span
-                                        class="fa fa-picture-o"></span>And</a></li>
+                                        class="fa fa-picture-o"></span>and
+                                </a></li>
+                                <li><a onclick="lab.loadNode('or')"><span
+                                        class="fa fa-picture-o"></span>or</a></li>
+                                <li><a onclick="lab.loadNode('nor')"><span
+                                        class="fa fa-picture-o"></span>nor
+                                </a></li>
+                                <li><a onclick="lab.loadNode('nand')"><span
+                                        class="fa fa-picture-o"></span>nand
+                                <li><a onclick="lab.loadNode('xor')"><span
+                                        class="fa fa-picture-o"></span>xor
+                            </a></li>
+                                <li><a onclick="lab.loadNode('nxor')"><span
+                                        class="fa fa-picture-o"></span>nxor
+                                </a></li>
+                                </a></li>
                             </ul>
                         </li>
 
@@ -84,24 +100,63 @@
             <ul class="menu-sort">
                 <li><a onclick="lab.undo()">Undo<span class="fa fa-undo"></span></a></li>
                 <li><a onclick="lab.redo()">Redo<span class="fa fa-repeat"></span></a></li>
-                <li><a onclick="lab.setStatus(NORMAL)">Edit <i class="fa fa-pencil-square-o fa-lg"></i></a></li>
-                <li><a onclick="lab.setStatus(DELETE)">Delete <i class="fa fa-eraser fa-lg"></i></a></li>
+                <li id="edit-elm"><a
+                        onclick="set_edit(lab.setStatus, NORMAL)">Edit <i
+                        class="fa fa-pencil-square-o fa-lg"></i></a></li>
+                <li id="delete-elm"><a
+                        onclick="set_delete(lab.setStatus, DELETE)">Delete
+                    <i class="fa fa-eraser fa-lg"></i></a></li>
                 <li><a onclick="lab.svgContainer.center()">Center<span class="fa fa-arrows"></span></a></li>
-                <li><a onclick="lab.save()">Save<span class="fa fa-floppy-o"></span></a></li>
-                <li><a onclick="lab.load()">Load<span class="fa fa-cloud-upload" aria-hidden="true"></span></a></li>
-                <li><a onclick="lab.download()">Download<span class="fa fa-download"></span></a></li>
-                <li><a onclick="lab.upLoad()">UpLoad<span class="fa fa-upload" aria-hidden="true"></span></a></li>
                 <!--<li><a onclick="console.log(lab.nodesBundler.nodesList)">
                     debug</a></li>--&gt;<i class="" aria-hidden="true"></i>-->
             </ul>
         </li>
         <li>
+        <li>
+            <ul  class="account">
+                <li>
+                    <a onclick="show_more_menu()">Save
+                        <span class="fa fa-ellipsis-v fa-3x"></span>
+                    </a>
+                </li>
+            </ul>
         </li>
     </ul>
     <div id="lab-svg">
 
     </div>
 </div><!-- /container -->
+<div class="before-panel  animated mfadeIn" onclick="close_more_menu()"></div>
+<div class="more-panel animated fadeIn">
+    <div class="panel-header">
+        <h2>Save Menu:</h2>
+    </div>
+    <ul class="">
+        <li >
+            <a onclick="lab.save() || close_more_menu()"><span
+                    class="fa fa-floppy-o"></span> Save</a>
+            <p>*save on your browser</p>
+        </li>
+        <li >
+            <a onclick="(lab.load() || close_more_menu())"><span
+                    class="fa fa-cloud-upload"></span> Load</a>
+            <p>*load from your browser</p>
+        </li>
+        <li >
+            <a onclick="(lab.download() || close_more_menu())"><span
+                    class="fa fa-download"></span> Backup</a>
+            <p>*export copy of the Backup</p>
+        </li>
+        <li >
+            <a onclick="upload()"><span
+                    class="fa fa-upload"></span> Upload</a>
+            <p style="margin-top: 0px;margin-bottom: 0px;">
+                <input id="file-input" type='file' accept='text/plain' />
+            </p>
+        </li>
+    </ul>
+
+</div>
 <!--
 <div id="app">
     <button id="test-btn">test button</button>
@@ -110,6 +165,12 @@
 </div>
 -->
 <script type="text/javascript">
+    var _edit = document.querySelector("#edit-elm a");
+    var _delete = document.querySelector("#delete-elm a");
+    var _more_menu = document.getElementsByClassName("more-panel")[0];
+    var _before_more_menu = document.getElementsByClassName("before-panel")[0];
+    var _file_input = document.getElementById("file-input");
+
     lab = {};
     if (
             document.readyState === "complete" ||
@@ -122,6 +183,55 @@
             new gnMenu( document.getElementById( 'menu' ) );
             main();
         });
+    }
+    function set_edit (f, s)
+    {
+        _set(_edit);
+        _unset(_delete);
+        f(s);
+    }
+    function set_delete (f, s)
+    {
+        _set(_delete);
+        _unset(_edit);
+        f(s);
+    }
+    function _set(node)
+    {
+        node.style.background = "rgb(68, 70, 122)";
+        node.style.color = "white";
+    }
+    function _unset(node)
+    {
+        node.style.background = "white";
+        node.style.color = "rgb(68, 70, 122)";
+    }
+
+    function show_more_menu()
+    {
+        _before_more_menu.style.display = 'block';
+        _more_menu.style.display = 'block';
+    }
+    function close_more_menu()
+    {
+        _before_more_menu.style.display = 'none';
+        _more_menu.style.display = 'none';
+    }
+
+    function upload ()
+    {
+        if (_file_input.value == "")
+        {
+            alert("please select file");
+            return;
+        }
+        let reader = new FileReader();
+
+        reader.onload = function(){
+            lab.upLoad(reader.result);
+            close_more_menu();
+        };
+        reader.readAsText(_file_input.files[0]);
     }
 </script>
 

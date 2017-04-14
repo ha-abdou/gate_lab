@@ -1,11 +1,65 @@
+/**
+ * Created by abdou on 14/04/17.
+ */
 'use strict';
-//todo
-function loadTemplate() {
+function simpleOperators (thum: string, updateOutput: any): {}
+{
+    return (
+    {
+        content: `
+			<g class="draggable">
+			    ` + thum + `
+			</g>
+			</g>
+			<circle connectable="input" class="connectable input-a" cx="5"
+				cy="13" r="5"/>
+			<circle connectable="input" class="connectable input-b"
+				cx="5" cy="39" r="5"/>
+			<circle connectable="output" class="connectable output-c" cx="100"
+				cy="26" r="5"/>
+			`,
+        beforeStart: function () {
+            let inputs =
+                [
+                    {
+                        position: {x: 5, y: 13},
+                        name: 'a',
+                        elm: this.getElementsByClassName('input-a')[0]
+                    },
+                    {
+                        position: {x: 5, y: 39},
+                        name: 'b',
+                        elm: this.getElementsByClassName('input-b')[0]
+                    }
+                ];
+            let outputs =
+                [
+                    {
+                        position: {x: 100, y: 26},
+                        name: 'c',
+                        elm: this.getElementsByClassName('output-c')[0]
+                    }
+                ];
+            return ({inputs: inputs, outputs: outputs});
+        },
+        afterStart: function()
+        {
+            this.setOutputValue('c', updateOutput.call(this));
+            this.onInputValueChange('a', () =>{
+                this.setOutputValue('c', updateOutput.call(this));
+            });
+            this.onInputValueChange('b', () =>{
+                this.setOutputValue('c', updateOutput.call(this));
+            });
+        }
+    });
+}
+
+function loadOperators (tmpls: any)
+{
     let op_nodes: any;
-    let nodes: {};
     let l: number;
 
-    nodes = {};
     op_nodes =
         [
             {
@@ -51,8 +105,8 @@ function loadTemplate() {
                 + 'transform="scale(1.8,2)"></path>',
                 updateOutput: function () {
                     return ((this.getInputLastValue('a') && !this.getInputLastValue('b'))
-                            ||
-                            (!this.getInputLastValue('a') && this.getInputLastValue('b')));
+                    ||
+                    (!this.getInputLastValue('a') && this.getInputLastValue('b')));
                 }
             },
             {
@@ -62,71 +116,12 @@ function loadTemplate() {
                 + 'transform="scale(1.7,2)"></path>',
                 updateOutput: function () {
                     return !((this.getInputLastValue('a') && !this.getInputLastValue('b'))
-                            ||
-                            (!this.getInputLastValue('a') && this.getInputLastValue('b')));
+                    ||
+                    (!this.getInputLastValue('a') && this.getInputLastValue('b')));
                 }
             },
         ];
-
-    loadOperators(nodes);
-
-    nodes.display = {
-        content: `
-			<g class="draggable">
-				<rect width="40" height="40" rx="10" ry="10"
-				    style="fill:#ce0200;stroke:#c0bdbd;stroke-width:5"></rect>
-			</g>
-			<circle connectable="input" class="connectable input-a" cx="-2"
-				cy="20" r="5"/>
-			`,
-        beforeStart: function ()
-        {
-            let inputs =
-                [
-                    {
-                        position: {x: -2, y: 20},
-                        name: 'a',
-                        elm: this.getElementsByClassName('input-a')[0]
-                    }
-                ];
-            return ({inputs: inputs, outputs: []});
-        },
-        afterStart: function ()
-        {
-            this.onInputValueChange('a', () =>{
-                if (this.getInputLastValue('a') !== true)
-                    this.elm.querySelector(".draggable rect").style.fill = "#ce0200";
-                else
-                    this.elm.querySelector(".draggable rect").style.fill = "#2bce00";
-            })
-        }
-    };
-    nodes.source = {
-        content: `
-			<g class="draggable">
-				<rect width="40" height="40" rx="10" ry="10"
-				    style="fill:#00ce26;stroke:#c0bdbd;stroke-width:5"></rect>
-			</g>
-			<circle connectable="output" class="connectable output-a" cx="42"
-				cy="20" r="5"/>
-			`,
-        beforeStart: function ()
-        {
-            let	outputs =
-                [
-                    {
-                        position: {x: 42, y: 20},
-                        name: 'a',
-                        elm: this.getElementsByClassName('output-a')[0]
-                    }
-                ];
-            return ({inputs: [], outputs: outputs});
-        },
-        afterStart: function()
-        {
-            this.setOutputValue('a', true);
-        }
-    }
-
-    return (nodes);
+    l = op_nodes.length;
+    for (let i = 0; i < l; i++)
+        tmpls[op_nodes[i].name] = simpleOperators(op_nodes[i].thum,op_nodes[i].updateOutput);
 }

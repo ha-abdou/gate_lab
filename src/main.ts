@@ -6,7 +6,8 @@
 function main() {
     lab = new GLab("lab-svg");
 
-  //lab.loadNode("and");
+    set_edit(lab.setStatus, NORMAL);
+  lab.loadNode("and");
 //	lab.loadNode("source");
-    lab.loadNode("display");
+//    lab.loadNode("display");
 }

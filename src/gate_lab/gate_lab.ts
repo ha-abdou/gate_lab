@@ -89,17 +89,15 @@ class GLab
         let name: string;
         let file: string;
 
-        name = prompt('file name: ','logic_gate.json');
+        name = prompt('file name: ','logic_gate');
         file = this.saver.save();
-        download(file, name, 'text/plain');
+        download(file, name + '.txt', 'text/plain');
     }
 
-    upLoad ()
+    upLoad (s: string)
     {
-        let s:   string;
         let tmp: string;
 
-        s = prompt('enter:');
         tmp = this.saver.save();
         this.deleteAllNodes();
         if (s && this.saver.open(s))
