@@ -81,7 +81,10 @@ class GLab
         if (this.saver.open(localStorage.getItem('save')))
             this.historic_manager.clear();
         else
+        {
+            this.deleteAllNodes();
             this.saver.open(tmp);
+        }
     }
     //todo
     download ()
@@ -108,10 +111,13 @@ class GLab
 
     deleteAllNodes ()
     {
+        this.svgContainer.elm.innerHTML = '';
+        this.nodesBundler.nodesList = [];
+        /*
         for (let node in this.nodesBundler.nodesList)
         {
             this.deleteNode(null, this.nodesBundler.nodesList[node]);
-        }
+        }*/
     }
 
     appendNode(node: Node)

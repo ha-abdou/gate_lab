@@ -7,7 +7,7 @@ function main() {
     lab = new GLab("lab-svg");
 
     set_edit(lab.setStatus, NORMAL);
-  lab.loadNode("and");
+  lab.loadNode("tri_state");
 //	lab.loadNode("source");
 //    lab.loadNode("display");
 }

@@ -36,7 +36,8 @@
                 <div class="scroller">
                     <ul class="menu">
                         <li class="search-item">
-                            <input placeholder="Search" type="search" class="search">
+                            <input placeholder="Search (todo)" type="search"
+                                   class="search">
                             <a class="icon icon-search"><span>Search</span></a>
                         </li>
                         <li>
@@ -54,10 +55,16 @@
                                         class="fa fa-picture-o"></span>nand
                                 <li><a onclick="lab.loadNode('xor')"><span
                                         class="fa fa-picture-o"></span>xor
-                            </a></li>
+                                </a></li>
                                 <li><a onclick="lab.loadNode('nxor')"><span
                                         class="fa fa-picture-o"></span>nxor
                                 </a></li>
+                                <li><a onclick="lab.loadNode('not')"><span
+                                        class="fa fa-picture-o"></span>not
+                                </a></li>
+                                <li><a
+                                        onclick="lab.loadNode('tri_state')"><span
+                                        class="fa fa-picture-o"></span>tri-state
                                 </a></li>
                             </ul>
                         </li>
@@ -73,13 +80,22 @@
                         <li>
                             <a><span class="fa fa-sign-out"></span>Source</a>
                             <ul class="submenu">
-                                <li><a onclick="lab.loadNode('source')"><span
-                                        class="fa fa-picture-o"></span>true
-                                    source
+                                <li><a onclick="lab.loadNode('toggle_switch')"><span
+                                        class="fa fa-picture-o"></span>toggle
+                                    switch
                                 </a></li>
                                 <li><a onclick="lab.loadNode('clock')"><span
-                                        class="fa fa-picture-o"></span>true
-                                    clock
+                                        class="fa fa-picture-o"></span>clock
+                                </a></li>
+                                <li><a
+                                        onclick="lab.loadNode('source_true')"><span
+                                        class="fa fa-picture-o"></span>high
+                                    constant
+                                </a></li>
+                                <li><a
+                                        onclick="lab.loadNode('source_false')"><span
+                                        class="fa fa-picture-o"></span>low
+                                    constant
                                 </a></li>
                             </ul>
                         </li>
@@ -87,7 +103,15 @@
                         <li>
                             <a><span class="fa fa-square-o"></span> FlipFlop</a>
                             <ul class="submenu">
-                                <li><a onclick="lab1.addNode('flipFlopT')"><span class="fa fa-picture-o"></span>T</a></li>
+                                <li><a
+                                        onclick="lab.loadNode('flip_flop_t')"><span class="fa fa-picture-o"></span>T</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a><span class="fa fa-square-o"></span> Other</a>
+                            <ul class="submenu">
+                                <li><a onclick="lab.loadNode('label')"><span
+                                        class="fa fa-picture-o"></span>T</a></li>
                             </ul>
                         </li>
 

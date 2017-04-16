@@ -55,10 +55,9 @@ function simpleOperators (thum: string, updateOutput: any): {}
     });
 }
 
-function loadOperators (tmpls: any)
-{
-    let op_nodes: any;
-    let l: number;
+function loadOperators (tmpls: any) {
+    let op_nodes:any;
+    let l:number;
 
     op_nodes =
         [
@@ -123,5 +122,109 @@ function loadOperators (tmpls: any)
         ];
     l = op_nodes.length;
     for (let i = 0; i < l; i++)
-        tmpls[op_nodes[i].name] = simpleOperators(op_nodes[i].thum,op_nodes[i].updateOutput);
+        tmpls[op_nodes[i].name] = simpleOperators(op_nodes[i].thum, op_nodes[i].updateOutput);
+
+    tmpls.not = {
+        content: `
+			<g class="draggable">
+			    <g transform="translate(-27,-385)" > <path style="fill:beige;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1"
+                d="M 48.499947,208.09448 C 48.499947,209.19848 47.603947,210.09448 46.499948,210.09448 C 45.395948,210.09448 44.499948,209.19848 44.499948,208.09448 C 44.499948,206.99048 45.395948,206.09448 46.499948,206.09448 C 47.603947,206.09448 48.499947,206.99048 48.499947,208.09448 z M 25,219.09448 L 25,197.09448 L 43.985582,208.09448 L 25,219.09448 z M 48.5,208.09448 L 57.50006,208.09448 M 16,208.09448 L 25.00006,208.09448"
+                transform="scale(2,2)"></path>
+			</g>
+			</g>
+			<circle connectable="input" class="connectable input-a" cx="0"
+				cy="31" r="5"/>
+			<circle connectable="output" class="connectable output-c" cx="90"
+				cy="31" r="5"/>
+			`,
+        beforeStart: function () {
+            let inputs =
+                [
+                    {
+                        position: {x: 0, y: 31},
+                        name: 'a',
+                        elm: this.getElementsByClassName('input-a')[0]
+                    }
+                ];
+            let outputs =
+                [
+                    {
+                        position: {x: 90, y: 31},
+                        name: 'c',
+                        elm: this.getElementsByClassName('output-c')[0]
+                    }
+                ];
+            return ({inputs: inputs, outputs: outputs});
+        },
+        afterStart: function () {
+            this.setOutputValue('c', !this.getInputLastValue('a'));
+            this.onInputValueChange('a', () => {
+                this.setOutputValue('c', !this.getInputLastValue('a'));
+            });
+        }
+    };
+    tmpls.tri_state = {
+        content: `
+			<g class="draggable">
+			    <line
+                x1="45"
+                y1="-10"
+                x2="45"
+                y2="30"
+                style="stroke:#000;stroke-width:2"
+			    ></line>
+			    <g transform="translate(-27,-385)" > <path style="fill:beige;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1"
+                d="M 48.499947,208.09448  z M 25,219.09448 L 25,197.09448 L 43.985582,208.09448 L 25,219.09448 z M 43.5,208.09448 L 57.50006,208.09448 M 16,208.09448 L 25.00006,208.09448"
+                transform="scale(2,2)"></path>
+			    </g>
+			</g>
+			<circle connectable="input" class="connectable input-a" cx="0"
+				cy="31" r="5"/>
+			<circle connectable="input" class="connectable input-b" cx="45"
+				cy="-10" r="5"/>
+			<circle connectable="output" class="connectable output-c" cx="90"
+				cy="31" r="5"/>
+			`,
+        beforeStart: function () {
+            let inputs =
+                [
+                    {
+                        position: {x: 0, y: 31},
+                        name: 'a',
+                        elm: this.getElementsByClassName('input-a')[0]
+                    },
+                    {
+                        position: {x: 45, y: -10},
+                        name: 'b',
+                        elm: this.getElementsByClassName('input-b')[0]
+                    }
+                ];
+            let outputs =
+                [
+                    {
+                        position: {x: 90, y: 31},
+                        name: 'c',
+                        elm: this.getElementsByClassName('output-c')[0]
+                    }
+                ];
+            return ({inputs: inputs, outputs: outputs});
+        },
+        afterStart: function () {
+            upDate.call(this);
+            this.onInputValueChange('b', () => {
+                upDate.call(this);
+            });
+            this.onInputValueChange('a', () => {
+                upDate.call(this);
+            });
+            function upDate ()
+            {
+                if (this.getInputLastValue('b') === true)
+                    this.setOutputValue('c', this.getInputLastValue('a'));
+                else
+                    this.setOutputValue('c', null);
+            }
+        }
+    };
+
 }
