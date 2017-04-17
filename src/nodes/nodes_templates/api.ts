@@ -33,12 +33,17 @@ class TempaleteAPI{
         return ([]);
     }
 
-    getInputLastValue (name: string): any
+    inputHasTrue (name: string): boolean
     {
-        for (let i = this.node.inputs.length - 1; i >= 0; i--)
-            if (this.node.inputs[i].name === name)
-                return (this.node.inputs[i].getLastValue());
-        return (null);
+        let tab: any[];
+
+        tab = this.getInputValues(name);
+        for (let i = tab.length - 1; i >= 0; i--)
+        {
+            if (tab[i] === true)
+                return (true);
+        }
+        return (false);
     }
 
     getOutputValue (name: string): any

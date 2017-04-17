@@ -6,8 +6,14 @@
 function main() {
     lab = new GLab("lab-svg");
 
+
     set_edit(lab.setStatus, NORMAL);
-  lab.loadNode("tri_state");
+    lab.load();
+    window.onbeforeunload = () =>{
+        lab.save();
+        return null;
+    };
+//  lab.loadNode("tri_state");
 //	lab.loadNode("source");
 //    lab.loadNode("display");
 }

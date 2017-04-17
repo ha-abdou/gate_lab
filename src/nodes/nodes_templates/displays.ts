@@ -3,7 +3,7 @@
  */
 function loadDisplays (nodes: any)
 {
-    nodes.display = {
+    nodes.lamp = {
         content: `
 			<g class="draggable">
 				<rect width="50" height="50" rx="10" ry="10"
@@ -41,7 +41,7 @@ function loadDisplays (nodes: any)
         afterStart: function ()
         {
             this.onInputValueChange('a', () =>{
-                if (this.getInputLastValue('a') === true)
+                if (this.inputHasTrue('a') === true)
                     this.elm.querySelector(".draggable .controller").style.fill = "rgb(0, 255, 43)";
                 else
                     this.elm.querySelector(".draggable .controller").style.fill = "rgba(255,255,255,0.95)";

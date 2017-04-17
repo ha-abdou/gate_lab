@@ -14,7 +14,7 @@ class SVGContainer
         this.elm.setAttribute('width', width.toString());
         this.elm.setAttribute('height', height.toString());
         this.elm.style.position = 'absolute';
-        this.elm.onmousedown = this.dragAndDropHandler.bind(this);
+        this.elm.onmousedown = this.dragAndDropHandler.bind(this)
     }
 
     center ()
