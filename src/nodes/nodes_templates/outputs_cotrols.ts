@@ -8,7 +8,7 @@ function loadOutputsControls (nodes: any)
         content: `
 			<g class="draggable">
 				<rect width="50" height="50" rx="10" ry="10"
-				    style="fill:rgba(75, 75, 75, .4);stroke:#807777;stroke-width:5"></rect>
+				    style="fill:#eee;stroke:#807777;stroke-width:5"></rect>
 			</g>
 			<line
 			x1="50"
@@ -65,7 +65,7 @@ function loadOutputsControls (nodes: any)
         content: `
 			<g class="draggable">
 				<rect width="50" height="50" rx="10" ry="10"
-				    style="fill:rgba(75, 75, 75, .4);stroke:#807777;stroke-width:5"></rect>
+				    style="fill:#eee;stroke:#807777;stroke-width:5"></rect>
 			<line
 			x1="10"
 			y1="22"
@@ -138,7 +138,7 @@ function loadOutputsControls (nodes: any)
         content: `
 			<g class="draggable">
 				<rect width="50" height="50" rx="10" ry="10"
-				    style="fill:rgba(75, 75, 75, .4);stroke:#807777;stroke-width:5"></rect>
+				    style="fill:#eee;stroke:#807777;stroke-width:5"></rect>
 			<line
 			x1="15"
 			y1="20"
@@ -185,7 +185,7 @@ function loadOutputsControls (nodes: any)
         content: `
 			<g class="draggable">
 				<rect width="50" height="50" rx="10" ry="10"
-				    style="fill:rgba(75, 75, 75, .4);stroke:#807777;stroke-width:5"></rect>
+				    style="fill:#eee;stroke:#807777;stroke-width:5"></rect>
 			<ellipse cx="25" cy="25" rx="12" ry="17"
 			style="fill: rgba(0,0,0,0);stroke:#000;stroke-width:4"
 			/>

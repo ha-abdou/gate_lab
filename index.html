@@ -35,11 +35,12 @@
             <nav class="menu-wrapper open-part" style="z-index: 100;border-right: 1px solid;">
                 <div class="scroller">
                     <ul class="menu">
+                        <!--
                         <li class="search-item">
                             <input placeholder="Search (todo)" type="search"
                                    class="search">
                             <a class="icon icon-search"><span>Search</span></a>
-                        </li>
+                        </li>-->
                         <li>
                             <a><span class="fa fa-square"></span>Logic Operator</a>
                             <ul class="submenu">
@@ -75,13 +76,9 @@
                                 <li><a onclick="lab.loadNode('lamp')"><span
                                         class="fa fa-picture-o"></span>lamp
                                 </a></li>
-                                <li><a onclick="lab.loadNode('ssdis')"><span
+                                <li><a onclick="//lab.loadNode('lamp')"><span
                                         class="fa fa-picture-o"></span>7 segment display
                                 </a></li>
-                                <li><a onclick="lab.loadNode('ssder')"><span
-                                        class="fa fa-picture-o"></span>7 segment decoder
-                                </a></li>
-
                             </ul>
                         </li>
 
@@ -112,14 +109,15 @@
                             <a><span class="fa fa-square-o"></span> FlipFlop</a>
                             <ul class="submenu">
                                 <li><a
-                                        onclick="lab.loadNode('flip_flop_t')"><span class="fa fa-picture-o"></span>T</a></li>
+                                        onclick="//lab.loadNode('flip_flop_t')"><span class="fa fa-picture-o"></span>T (todo)</a></li>
                             </ul>
                         </li>
                         <li>
                             <a><span class="fa fa-plus-square"></span> Other</a>
                             <ul class="submenu">
-                                <li><a onclick="lab.loadNode('label')"><span
+                                <li><a onclick="//lab.loadNode('label')"><span
                                         class="fa fa-picture-o"></span>label
+                                    (todo)
                                 </a></li>
                             </ul>
                         </li>
@@ -148,7 +146,7 @@
         <li>
             <ul  class="account">
                 <li>
-                    <a onclick="show_more_menu()">Save
+                    <a onclick="show_more_menu()">More
                         <span class="fa fa-ellipsis-v fa-3x"></span>
                     </a>
                 </li>
@@ -162,9 +160,10 @@
 <div class="before-panel  animated mfadeIn" onclick="close_more_menu()"></div>
 <div class="more-panel animated fadeIn">
     <div class="panel-header">
-        <h2>Save Menu:</h2>
+        <h2>More:</h2>
     </div>
     <ul class="">
+        <!--
         <li >
             <a onclick="lab.save() || close_more_menu()"><span
                     class="fa fa-floppy-o"></span> Save</a>
@@ -175,6 +174,7 @@
                     class="fa fa-cloud-upload"></span> Load</a>
             <p>*load from your browser</p>
         </li>
+        -->
         <li >
             <a onclick="(lab.download() || close_more_menu())"><span
                     class="fa fa-download"></span> Backup</a>
@@ -183,7 +183,7 @@
         <li >
             <a onclick="upload()"><span
                     class="fa fa-upload"></span> Upload</a>
-            <p style="margin-top: 0px;margin-bottom: 0px;">
+            <p style="margin-top: 0;margin-bottom: 0;">
                 <input id="file-input" type='file' accept='text/plain' />
             </p>
         </li>
@@ -263,6 +263,8 @@
         reader.onload = function(){
             lab.upLoad(reader.result);
             close_more_menu();
+            //todo fix bug: create line
+            location.reload();
         };
         reader.readAsText(_file_input.files[0]);
     }

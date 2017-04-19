@@ -3,9 +3,10 @@
  */
 class SVGContainer
 {
-    elm:        SVGElement;
-    position:   Position;
-    scale:      number;
+    elm:            SVGElement;
+    lineContainer:  SVGAElement;
+    position:       Position;
+    scale:          number;
     constructor (public width: number, public height: number)
     {
         this.scale = 1;
@@ -14,7 +15,13 @@ class SVGContainer
         this.elm.setAttribute('width', width.toString());
         this.elm.setAttribute('height', height.toString());
         this.elm.style.position = 'absolute';
-        this.elm.onmousedown = this.dragAndDropHandler.bind(this)
+        this.lineContainer = <SVGElement>document.createElementNS(SVGNS, 'g');
+        this.lineContainer.setAttribute("class", "line-container");
+        this.elm.onmousedown = this.dragAndDropHandler.bind(this);
+        //todo
+        setTimeout(()=>{
+            this.appendChild(this.lineContainer);
+        },0);
     }
 
     center ()
@@ -42,6 +49,11 @@ class SVGContainer
     appendChild (elm: SVGElement)
     {
         this.elm.appendChild(elm);
+    }
+
+    appendLine (elm: SVGElement)
+    {
+        this.lineContainer.appendChild(elm);
     }
 
     move (to: Position)

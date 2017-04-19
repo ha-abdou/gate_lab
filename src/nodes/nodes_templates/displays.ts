@@ -7,7 +7,7 @@ function loadDisplays (nodes: any)
         content: `
 			<g class="draggable">
 				<rect width="50" height="50" rx="10" ry="10"
-				    style="fill:rgba(75, 75, 75, .4);stroke:#807777;stroke-width:5"></rect>
+				    style="fill:#eee;stroke:#807777;stroke-width:5"></rect>
 						<line
                 x1="0"
                 y1="25"

@@ -136,7 +136,7 @@ class GLab
             seg = new Segment(from, to);
         from.addConnection(seg);
         to.addConnection(seg);
-        this.svgContainer.appendChild(seg.elm);
+        this.svgContainer.appendLine(seg.elm);
         this.historic_manager.push(<Historic>{
             undo: {func: this.deleteConnection, thisArgc: this, argcs: [null, seg]},
             redo: {func: this.createConnection, thisArgc: this, argcs: [seg.from, seg.to, seg]}
@@ -224,7 +224,7 @@ class GLab
             node = e.detail.node;
         node.mapConnections((seg: Segment) => {
             seg.upDate();
-            this.svgContainer.appendChild(seg.elm);
+            this.svgContainer.appendLine(seg.elm);
         });
         //todo review this
         node.elm.remove();
