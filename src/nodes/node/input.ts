@@ -44,7 +44,8 @@ class Input
         if (this.value != value)
         {
             this.value = value;
-            this.onValueChange();
+            if (typeof this.onValueChange === "function")
+                this.onValueChange();
         }
     }
 

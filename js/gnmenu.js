@@ -8,8 +8,9 @@
  * Copyright 2013, Codrops
  * http://www.codrops.com
  */
+
 ;( function( window ) {
-	
+
 	'use strict';
 	function mobilecheck() {
 		var check = false;

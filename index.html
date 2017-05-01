@@ -1,33 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" manifest="/cache.manifest">
 <head>
     <meta charset="UTF-8">
     <title>logic lab | dev</title>
-
-    <link rel="stylesheet" type="text/css" href="css/normalize.css" />
-    <link rel="stylesheet" type="text/css" href="css/demo.css" />
-    <link rel="stylesheet" type="text/css" href="css/component.css" />
-    <link rel="stylesheet" href="css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <link rel="stylesheet" type="text/css" href="css/animate.css">
-
-    <script src="js/modernizr.custom.js"></script>
-    <script src="js/jquery.js"></script>
-    <script src="js/jquery-ui.js"></script>
-    <script src="js/UI.js"></script>
-
-    <script src="js/classie.js"></script>
-    <script src="js/gnmenu.js"></script>
+    <link rel="stylesheet" type="text/css" href="built/style.css" />
 </head>
 <body>
-
-<!--
-<div id="dom-elements">
-    <button id="test-btn">test button</button>
-    <br>
-    <input id="test-input" class="zz"/>
-</div>
--->
 <div class="container">
     <ul id="menu" class="menu-main">
         <li class="trigger">
@@ -35,12 +13,6 @@
             <nav class="menu-wrapper open-part" style="z-index: 100;border-right: 1px solid;">
                 <div class="scroller">
                     <ul class="menu">
-                        <!--
-                        <li class="search-item">
-                            <input placeholder="Search (todo)" type="search"
-                                   class="search">
-                            <a class="icon icon-search"><span>Search</span></a>
-                        </li>-->
                         <li>
                             <a><span class="fa fa-square"></span>Logic Operator</a>
                             <ul class="submenu">
@@ -76,8 +48,10 @@
                                 <li><a onclick="lab.loadNode('lamp')"><span
                                         class="fa fa-picture-o"></span>lamp
                                 </a></li>
-                                <li><a onclick="//lab.loadNode('lamp')"><span
-                                        class="fa fa-picture-o"></span>7 segment display
+                                <li><a
+                                        onclick="lab.loadNode('segments_display')"><span
+                                        class="fa fa-picture-o"></span>7
+                                    segments display
                                 </a></li>
                             </ul>
                         </li>
@@ -109,7 +83,7 @@
                             <a><span class="fa fa-square-o"></span> FlipFlop</a>
                             <ul class="submenu">
                                 <li><a
-                                        onclick="//lab.loadNode('flip_flop_t')"><span class="fa fa-picture-o"></span>T (todo)</a></li>
+                                        onclick="lab.loadNode('flip_flop_t')"><span class="fa fa-picture-o"></span>T</a></li>
                             </ul>
                         </li>
                         <li>
@@ -190,14 +164,13 @@
     </ul>
 
 </div>
-<!--
-<div id="app">
-    <button id="test-btn">test button</button>
-    <br>
-    <input id="test-input" class="zz"/>
-</div>
--->
+<script src="built/javascript.js"></script>
+<script src="built/tsc.js"></script>
 <script type="text/javascript">
+    if (location.protocol != 'file:' && location.protocol != 'https:')
+    {
+        location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+    }
     var _edit = document.querySelector("#edit-elm a");
     var _delete = document.querySelector("#delete-elm a");
     var _more_menu = document.getElementsByClassName("more-panel")[0];
@@ -269,35 +242,8 @@
         reader.readAsText(_file_input.files[0]);
     }
 </script>
-
-<script src="built/tsc.js"></script>
-
+<script src="https://use.fontawesome.com/680f61315a.js"></script>
+<link rel="stylesheet" media="screen"
+      href="https://fontlibrary.org/face/segment7" type="text/css"/>
 </body>
 </html>
-<!--
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Glab</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
-</head>
-<body>
-	<div id="lab-svg"></div>
-</body>
-<script type="text/javascript">
-	if (
-	    document.readyState === "complete" ||
-	    (document.readyState !== "loading" && !document.documentElement.doScroll)
-	) {
-	  main();
-	} else {
-	  document.addEventListener("DOMContentLoaded", function () {
-	  	main();
-	  });
-	}
-</script>
-
-<script src="built/tsc.js"></script>
-
-</html>
--->

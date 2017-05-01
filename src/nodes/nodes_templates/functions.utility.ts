@@ -8,6 +8,7 @@ function loadTemplate() {
     loadOutputsControls(nodes);
     loadDisplays(nodes);
     loadOther(nodes);
+    loadFlipFlops(nodes);
     return (nodes);
 }
 
