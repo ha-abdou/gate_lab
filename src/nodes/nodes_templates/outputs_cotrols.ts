@@ -57,7 +57,7 @@ function loadOutputsControls (nodes: any)
                 if (val === true)
                     con.style.fill = "rgb(0, 255, 43)";
                 else
-                    con.style.fill = "rgba(255,255,255,0.95)";
+                    con.style.fill = "rgb(255,43,0)";
             }
         }
     };
