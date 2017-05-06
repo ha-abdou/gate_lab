@@ -14,6 +14,7 @@ function main() {
             if (this.readyState == 4) {
                 localStorage.setItem('save', this.responseText);
                 lab.load();
+                window.location.reload();
             }
         };
         xhttp.open("GET", "examples/1.txt", true);

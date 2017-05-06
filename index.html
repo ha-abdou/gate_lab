@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>logic lab | dev</title>
     <link rel="stylesheet" type="text/css" href="built/style.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2" />
 </head>
 <body>
 <div class="container">
@@ -46,12 +48,15 @@
                             <a><span class="fa fa-desktop"></span>Displays</a>
                             <ul class="submenu">
                                 <li><a onclick="lab.loadNode('lamp')"><span
-                                        class="fa fa-picture-o"></span>lamp
+                                        class="fa fa-lightbulb-o"></span>lamp
                                 </a></li>
                                 <li><a
-                                        onclick="lab.loadNode('segments_display')"><span
-                                        class="fa fa-picture-o"></span>7
-                                    segments display
+                                        onclick="lab.loadNode('segments_display')">
+                                    <span><h3
+                                            style="font-family:Segment7Standard;margin: 0;display: inline-block;font-size: xx-large;">
+                                        8
+                                    </h3></span>
+                                    7 segments display
                                 </a></li>
                             </ul>
                         </li>
@@ -60,20 +65,21 @@
                             <a><span class="fa fa-sign-out"></span>Source</a>
                             <ul class="submenu">
                                 <li><a onclick="lab.loadNode('toggle_switch')"><span
-                                        class="fa fa-picture-o"></span>toggle
+                                        class="fa fa-toggle-on"></span>toggle
                                     switch
                                 </a></li>
                                 <li><a onclick="lab.loadNode('clock')"><span
-                                        class="fa fa-picture-o"></span>clock
+                                        class="fa fa-clock-o"></span>clock
                                 </a></li>
                                 <li><a
-                                        onclick="lab.loadNode('source_true')"><span
-                                        class="fa fa-picture-o"></span>high
+                                        onclick="lab.loadNode('source_true')"> <span
+                                        class="fa fa-long-arrow-up"></span> high
                                     constant
                                 </a></li>
                                 <li><a
-                                        onclick="lab.loadNode('source_false')"><span
-                                        class="fa fa-picture-o"></span>low
+                                        onclick="lab.loadNode('source_false')"> <span
+                                        class="fa fa-long-arrow-down"></span>
+                                    low
                                     constant
                                 </a></li>
                             </ul>
@@ -83,14 +89,14 @@
                             <a><span class="fa fa-square-o"></span> FlipFlop</a>
                             <ul class="submenu">
                                 <li><a
-                                        onclick="lab.loadNode('flip_flop_t')"><span class="fa fa-picture-o"></span>T</a></li>
+                                        onclick="lab.loadNode('flip_flop_t')"><span class="fa fa-microchip"></span>T</a></li>
                             </ul>
                         </li>
                         <li>
                             <a><span class="fa fa-plus-square"></span> Other</a>
                             <ul class="submenu">
                                 <li><a onclick="lab.loadNode('label')"><span
-                                        class="fa fa-picture-o"></span>label
+                                        class="fa fa-tag"></span>label
                                 </a></li>
                             </ul>
                         </li>
@@ -243,9 +249,18 @@
         reader.readAsText(_file_input.files[0]);
     }
 </script>
-<script src="https://use.fontawesome.com/680f61315a.js"></script>
 <!--todo -->
 <link rel="stylesheet" media="screen"
       href="https://fontlibrary.org/face/segment7" type="text/css"/>
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-98624341-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
 </body>
 </html>
