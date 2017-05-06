@@ -17,13 +17,6 @@ function loadFlipFlops(nodes: any)
                 ></line>
                 <text x="1" y="24" font-size="25">></text>
                 <line
-                x1="0"
-                y1="35"
-                x2="-10"
-                y2="35"
-                style="stroke:#216622;stroke-width:4"
-                ></line>
-                <line
 				x1="50"
 				y1="15"
 				x2="60"
@@ -40,8 +33,6 @@ function loadFlipFlops(nodes: any)
 			</g>
 			<circle connectable="input" class="connectable input-a" cx="-15"
 				cy="15" r="5"/>
-			<circle connectable="input" class="connectable input-b" cx="-15"
-				cy="35" r="5"/>
 			<circle connectable="output" class="connectable output-a" cx="65"
 				cy="15" r="5"/>
 			<circle connectable="output" class="connectable output-b" cx="65"
@@ -55,11 +46,6 @@ function loadFlipFlops(nodes: any)
 						position: {x: -15, y: 15},
 						name: 'a',
 						elm: this.getElementsByClassName('input-a')[0]
-					},
-					{
-						position: {x: -15, y: 35},
-						name: 'b',
-						elm: this.getElementsByClassName('input-b')[0]
 					}
 				];
 			let	outputs =
@@ -80,7 +66,7 @@ function loadFlipFlops(nodes: any)
 		afterStart: function ()
 		{
 			this.setOutputValue('a',true);
-			this.setOutputValue('b',false);
+			this.setOutputValue('b',true);
 
 			this.onInputValueChange('a', ()=> {
 				updateOutputs.call(this);

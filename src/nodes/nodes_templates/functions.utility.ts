@@ -17,40 +17,45 @@ function loadOther (nodes: any)
     nodes.label = {
         content: `
 			<g class="draggable">
-				<rect width="50" height="50" rx="10" ry="10"
-				    style="fill:rgba(75, 75, 75, .4);stroke:#807777;stroke-width:5"></rect>
+				<rect class="rect-2" width="50" height="50"
+				    style="fill:rgb(150, 150, 150);stroke:#000;stroke-width:2"></rect>
 
 			</g>
-			<rect class="label-rect" x="15" y="15" height="20" width="20"
-			    style="fill:#fff">
-			</rect>
-			<text x="0" y="0" font-size="15" dy="0">
-        <tspan x="0" dy=".6em">tspan line 1</tspan>
-        <tspan x="0" dy="1.2em">tspan line 2</tspan>
-        <tspan x="0" dy="1.2em">tspan line 3</tspan>
-    </text>
-			<text class="label-text"></text>
+			<g class="cont" style="cursor: text">
+                <rect class="label-rect" x="15" y="15" height="20" width="20"
+                    style="fill:#fff">
+                </rect>
+                <text class="label-text" x="17" y="30" font-size="15" dy="0">
+                </text>
+            </g>
+
 			`,
         beforeStart: function ()
         {
             return ({inputs: [], outputs: []});
         },
-        afterStart: function()
+        afterStart: function($scope)
         {
-            let rect = this.elm.querySelector(".label-rect");
-            let text = this.elm.querySelector(".label-text");
-            let s    = 'Label.. \ndd';
+            let rect   = this.elm.querySelector(".label-rect");
+            let rect_2 = this.elm.querySelector(".rect-2");
+            let text   = this.elm.querySelector(".label-text");
+            let con    = this.elm.querySelector(".cont");
+            if (!$scope.txt)
+                $scope.txt = 'Label..';
 
-            rect.onmousedown = ()=>{
+            con.onmousedown = ()=>{
                 //todo $prompt
-                s = prompt(null, s);
+                $scope.txt = prompt("enter the text for the label:", $scope.txt);
+                if ($scope.txt == null)
+                    $scope.txt = "Label..";
                 update();
             };
 
             function update ()
             {
-                text.innerHTML = s;
-                console.log(s);
+                text.innerHTML = $scope.txt;
+                rect.setAttribute("width", text.clientWidth + 5);
+                rect_2.setAttribute("width", text.clientWidth + 35);
             }
             //todo afterStart
             setTimeout(()=>{

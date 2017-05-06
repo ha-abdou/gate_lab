@@ -120,6 +120,12 @@ class GLab
         }*/
     }
 
+    newSheet ()
+    {
+        this.deleteAllNodes();
+        this.historic_manager.clear();
+    }
+
     appendNode(node: Node)
     {
         this.svgContainer.appendChild(node.elm);

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" manifest="/cache.manifest">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>logic lab | dev</title>
@@ -89,9 +89,8 @@
                         <li>
                             <a><span class="fa fa-plus-square"></span> Other</a>
                             <ul class="submenu">
-                                <li><a onclick="//lab.loadNode('label')"><span
+                                <li><a onclick="lab.loadNode('label')"><span
                                         class="fa fa-picture-o"></span>label
-                                    (todo)
                                 </a></li>
                             </ul>
                         </li>
@@ -103,6 +102,8 @@
         </li>
         <li>
             <ul class="menu-sort">
+                <li><a onclick="lab.newSheet()">New
+                    <span class="fa fa-file"></span></a></li>
                 <li><a onclick="lab.undo()">Undo<span class="fa fa-undo"></span></a></li>
                 <li><a onclick="lab.redo()">Redo<span class="fa fa-repeat"></span></a></li>
                 <li id="edit-elm"><a
@@ -243,6 +244,7 @@
     }
 </script>
 <script src="https://use.fontawesome.com/680f61315a.js"></script>
+<!--todo -->
 <link rel="stylesheet" media="screen"
       href="https://fontlibrary.org/face/segment7" type="text/css"/>
 </body>
