@@ -6,7 +6,7 @@ class Saver
     private oCopy:    {};
     private conStack: {}[];
 
-    constructor (public sandBox: GLab)
+    constructor (public sandBox: SandBox)
     {
     }
 
@@ -28,10 +28,13 @@ class Saver
             this.oCopy = JSON.parse(copy);
             this.createSVGContainer();
             this.createNodes();
-            this.createConnections();
+            setTimeout(()=>{
+                this.createConnections();
+            }, 0);
         }
         catch (e)
         {
+            console.error(e);
             return (false);
         }
         return (true);

@@ -3,24 +3,28 @@
  */
 class SVGContainer
 {
-    elm:            SVGElement;
-    lineContainer:  SVGAElement;
+    elm:            Element;
+    lineContainer:  Element;
+    nodeContainer:  Element;
     position:       Position;
     scale:          number;
     constructor (public width: number, public height: number)
     {
         this.scale = 1;
-        this.elm = <SVGElement>document.createElementNS(SVGNS, 'svg');
+        this.elm = document.createElementNS(SVGNS, 'svg');
         this.elm.id = 'svg-container';
         this.elm.setAttribute('width', width.toString());
         this.elm.setAttribute('height', height.toString());
         this.elm.style.position = 'absolute';
-        this.lineContainer = <SVGElement>document.createElementNS(SVGNS, 'g');
+        this.lineContainer = document.createElementNS(SVGNS, 'g');
         this.lineContainer.setAttribute("class", "line-container");
+        this.nodeContainer = document.createElementNS(SVGNS, 'g');
+        this.nodeContainer.setAttribute("class", "node-container");
         this.elm.onmousedown = this.dragAndDropHandler.bind(this);
         //todo
         setTimeout(()=>{
-            this.appendChild(this.lineContainer);
+            this.elm.appendChild(this.lineContainer);
+            this.elm.appendChild(this.nodeContainer);
         },0);
     }
 
@@ -45,13 +49,18 @@ class SVGContainer
             y: window.screen.availHeight / 2 - this.position.y
         });
     }
-
+/*
     appendChild (elm: SVGElement)
     {
         this.elm.appendChild(elm);
     }
+*/
+    appendNode (elm: Element)
+    {
+        this.nodeContainer.appendChild(elm);
+    }
 
-    appendLine (elm: SVGElement)
+    appendLine (elm: Element)
     {
         this.lineContainer.appendChild(elm);
     }

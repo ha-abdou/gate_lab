@@ -174,17 +174,6 @@
 <script src="built/javascript.js"></script>
 <script src="built/tsc.js"></script>
 <script type="text/javascript">
-    if (location.protocol != 'file:' && location.protocol != 'https:')
-    {
-        location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
-    }
-    var _edit = document.querySelector("#edit-elm a");
-    var _delete = document.querySelector("#delete-elm a");
-    var _more_menu = document.getElementsByClassName("more-panel")[0];
-    var _before_more_menu = document.getElementsByClassName("before-panel")[0];
-    var _file_input = document.getElementById("file-input");
-
-    lab = {};
     if (
             document.readyState === "complete" ||
             (document.readyState !== "loading" && !document.documentElement.doScroll)
@@ -197,62 +186,12 @@
             main();
         });
     }
-    function set_edit (f, s)
-    {
-        _set(_edit);
-        _unset(_delete);
-        f(s);
-    }
-    function set_delete (f, s)
-    {
-        _set(_delete);
-        _unset(_edit);
-        f(s);
-    }
-    function _set(node)
-    {
-        node.style.background = "rgb(68, 70, 122)";
-        node.style.color = "white";
-    }
-    function _unset(node)
-    {
-        node.style.background = "white";
-        node.style.color = "rgb(68, 70, 122)";
-    }
-
-    function show_more_menu()
-    {
-        _before_more_menu.style.display = 'block';
-        _more_menu.style.display = 'block';
-    }
-    function close_more_menu()
-    {
-        _before_more_menu.style.display = 'none';
-        _more_menu.style.display = 'none';
-    }
-
-    function upload ()
-    {
-        if (_file_input.value == "")
-        {
-            alert("please select file");
-            return;
-        }
-        let reader = new FileReader();
-
-        reader.onload = function(){
-            lab.upLoad(reader.result);
-            close_more_menu();
-            //todo fix bug: create line
-            location.reload();
-        };
-        reader.readAsText(_file_input.files[0]);
-    }
 </script>
 <!--todo -->
 <link rel="stylesheet" media="screen"
       href="https://fontlibrary.org/face/segment7" type="text/css"/>
 <script>
+    /*
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -260,7 +199,7 @@
 
     ga('create', 'UA-98624341-1', 'auto');
     ga('send', 'pageview');
-
+*/
 </script>
 </body>
 </html>

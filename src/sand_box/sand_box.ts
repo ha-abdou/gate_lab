@@ -3,7 +3,7 @@
  */
 //formila
 "use strict";
-class GLab
+class SandBox
 {
     nodesBundler:       NodesBundler;//todo
     svgContainer:       SVGContainer;
@@ -74,16 +74,16 @@ class GLab
 
     load ()
     {
-        let tmp: string;
+        //let tmp: string;
 
-        tmp = this.saver.save();
-        this.deleteAllNodes();
+        //tmp = this.saver.save();
+        //this.deleteAllNodes();
         if (this.saver.open(localStorage.getItem('save')))
             this.historic_manager.clear();
         else
         {
-            this.deleteAllNodes();
-            this.saver.open(tmp);
+           // this.deleteAllNodes();
+            //this.saver.open(tmp);
         }
     }
     //todo
@@ -124,11 +124,12 @@ class GLab
     {
         this.deleteAllNodes();
         this.historic_manager.clear();
+        window.location.reload();
     }
 
     appendNode(node: Node)
     {
-        this.svgContainer.appendChild(node.elm);
+        this.svgContainer.appendNode(node.elm);
         this.nodesBundler.pushNode(node);
         this.historic_manager.push(<Historic>{
             undo: {func: this.deleteNode, thisArgc: this, argcs: [null, node]},
@@ -188,7 +189,7 @@ class GLab
     {
         let tmp_seg = new PreviewSegment(event.detail.con.globalPosition());
 
-        this.svgContainer.appendChild(tmp_seg.elm);
+        this.svgContainer.appendLine(tmp_seg.elm);
         let promise = new Promise((resolve: any, reject: any) => {
             document.onmousemove = (e: MouseEvent) => {
                 tmp_seg.upDate(<Position>{x: e.offsetX, y: e.offsetY});
@@ -197,7 +198,6 @@ class GLab
                 let upElm:  SVGElement;
 
                 tmp_seg.remove();
-                tmp_seg = null;
                 upElm = <SVGElement>document.elementFromPoint(e.pageX, e.pageY);
                 document.onmouseup = null;
                 document.onmousemove = null;
@@ -221,7 +221,7 @@ class GLab
         });
         //todo review this
         e.detail.node.elm.remove();
-        this.svgContainer.appendChild(e.detail.node.elm);
+        this.svgContainer.appendNode(e.detail.node.elm);
     }
 
     private onNodeMoved(e: CustomEvent, node: Node = null)
@@ -234,7 +234,7 @@ class GLab
         });
         //todo review this
         node.elm.remove();
-        this.svgContainer.appendChild(node.elm);
+        this.svgContainer.appendNode(node.elm);
         //
         function undoNodeMoved (node: Node, pos: Position)
         {
